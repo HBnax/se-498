@@ -1,2 +1,3 @@
-# se-498
+Halle Broadnax
+
 Repo for SE 498: Software Engineering Capstone
