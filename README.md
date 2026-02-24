@@ -1,3 +1,3 @@
-Halle Broadnax
+Halle Broadnax, Jeffrey Bok, and Daniel Min
 
-Repo for SE 498: Software Engineering Capstone
+Project for SE 498: Software Engineering Capstone
