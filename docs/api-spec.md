@@ -63,9 +63,9 @@ All endpoints require a **Bearer Token**
 }
 ```
 ## Database
-| Field | Type | Description                              |
-| --- | --- |------------------------------------------|
-| id | integer | unique identifier for each Pokémon       |
-| name | string | Pokémon name                             |
-| cry | string | filename of the Pokémon's cry audio file |
+| Field | Type    | Description                              |
+|-------|---------|------------------------------------------|
+| id    | integer | unique identifier for each Pokémon       |
+| name  | string  | Pokémon name                             |
+| cry   | string  | filename of the Pokémon's cry audio file |
 
