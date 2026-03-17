@@ -102,5 +102,4 @@ All endpoints require a **Bearer Token**
     "error": "Pokémon already exists"
 }
 ```
-this is a test
 
