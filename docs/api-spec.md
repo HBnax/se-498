@@ -62,10 +62,5 @@ All endpoints require a **Bearer Token**
   "error": "Invalid or missing token"
 }
 ```
-## Database
-| Field | Type    | Description                              |
-|-------|---------|------------------------------------------|
-| id    | integer | unique identifier for each Pokémon       |
-| name  | string  | Pokémon name                             |
-| cry   | string  | filename of the Pokémon's cry audio file |
+
 
