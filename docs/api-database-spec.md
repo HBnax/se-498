@@ -19,7 +19,11 @@ This database stores Pokémon names and their corresponding cry data for the ori
 | ... | ...       | ...     |
 | 151 | Mew       | 151.wav | 
 
-## Notes
-- Each name should be unique
-- 
-
+## SQL Query
+```
+CREATE TABLE pokemon (
+    id INTEGER PRIMARY KEY,
+    name TEXT NOT NULL,
+    cry TEXT NOT NULL
+);
+```
