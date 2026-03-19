@@ -1,122 +1,194 @@
-﻿# Pitch-A-Mon Backend Spec
+﻿# Pitch-A-Mon Backend Software Requirements Specification (SRS)
 
-## Overview
-This backend system manages Pokemon cry data for the original 151 Pokemon.  
-It handles authenticated requests, processes business logic, interacts with the database, and returns structured responses.
+## 1. Introduction
 
----
-
-## Authorization
-All endpoints require a **Bearer Token**
+### 1.1 Purpose
+This document defines the **backend requirements** for the Pitch-A-Mon system.  
+The backend is responsible for generating AI-based music using Pokemon cry data and returning a playable MP3 file.
 
 ---
 
-## Architecture
-```
-Client
-  ↓ HTTP Request
-Backend Server
-  ↓
-Service Layer (Validation & Logic)
-  ↓
-Database (Pokemon Table)
-```
+### 1.2 Scope
+The backend system will:
+
+- Authenticate users (login-based)
+- Retrieve mp3 file and Pokemon name from user
+- Retrieve Pokemon cry data
+- Generate music using an AI model
+- Process and encode audio into MP3 format
+- Store and return generated files
+
+This document focuses on **what the backend must do**, not how it is implemented.
 
 ---
 
-## Data Model
+### 1.3 Definitions
 
-### Pokemon Object
-```
-{
-  "id": int,
-  "name": string,
-  "cry_url": string, C:/Path/To/Cry/Audio/File
-}
-```
+| Term | Definition |
+|------|------|
+| Cry Data | Audio file representing a Pokemon sound |
+| AI Generation | Process of creating music from cry data |
+| MP3 Output | Final generated music file |
+| User | Authenticated client requesting music |
 
 ---
 
-## Database Schema
+## 2. Overall Description
 
-### Table: pokemon
+### 2.1 Product Perspective
+The backend acts as a **processing engine** between the client and audio generation system.
 
-| Column | Type | Constraints |
-|------|------|------|
-| id | INT | PRIMARY KEY, AUTO_INCREMENT |
-| name | VARCHAR | UNIQUE, NOT NULL |
-| cry | VARCHAR | NOT NULL |
-
----
-
-## Processing Flow
-
-### GET /pokemon
 ```
-1. Receive request
-2. Validate Bearer Token
-3. Query all Pokemon from database
-4. Return list of Pokemon
+Client → Backend → AI Processing → Audio Output
 ```
 
 ---
 
-### GET /pokemon/{name}
-```
-1. Receive request
-2. Validate Bearer Token
-3. Query Pokemon by name
-4. If not found → return 404
-5. Return Pokemon data
-```
+### 2.2 User Classes
+
+- **Authenticated Users**
+    - Can request music generation
+    - Can receive generated MP3 files
+
+- **Unauthenticated Users**
+    - Cannot generate music files
 
 ---
 
-### POST /pokemon
-```
-1. Receive request
-2. Validate Bearer Token
-3. Validate request body (name, cry)
-4. Check if Pokemon already exists
-   → If exists → return 409
-5. Insert new Pokemon into database
-6. Return success response (201)
-```
+### 2.3 Operating Environment
+
+- Runs on a web server
+- Supports local or cloud deployment
 
 ---
 
-## Validation Rules
+### 2.4 Constraints
 
-- `name` must be a non-empty string
-- `cry` must be a valid string (file name format)
-- Duplicate Pokemon names are not allowed
-
----
-
-## Error Handling
-
-| Status Code | Description               |
-|------|---------------------------|
-| 400 | Missing or invalid fields |
-| 401 | Invalid or missing token  |
-| 404 | Pokemon not found         |
-| 409 | Pokemon already exists    |
-| 500 | Internal server error     |
+- Must require user authentication
+- Must generate output as MP3 format
+- Must process valid Pokemon data only
+- AI processing time should be limited (reasonable response time)
 
 ---
 
-## Security
-
-- All endpoints require Bearer Token authentication
-- Input validation enforced on all requests
-- Prevent duplicate and malformed data insertion
+## 3. Specific Requirements
 
 ---
 
-## Future Improvements
+### 3.1 Functional Requirements
 
-- Add PUT endpoint for updates
-- Add DELETE endpoint
-- Implement pagination
-- Store cry files in cloud storage (e.g., AWS S3)
-- Add caching layer (e.g., Redis)  
+#### FR-1: User Authentication
+- The system must allow users to log in
+- Only authenticated users can access backend functionality
+
+---
+
+#### FR-2: Pokemon Data Retrieval
+- The system must retrieve cry data based on a Pokemon name
+- The system must verify that the Pokemon exists
+
+---
+
+#### FR-3: Music Generation
+- The system must generate music using Pokemon cry data
+- The system must use an AI-based process to create audio
+
+---
+
+#### FR-4: Audio Processing
+- The system must combine generated audio into a single track
+- The system must normalize audio (volume, length)
+
+---
+
+#### FR-5: MP3 Encoding
+- The system must encode generated audio into MP3 format
+
+---
+
+#### FR-6: File Storage
+- The system must store the generated MP3 file
+- The system must provide a retrievable file path or URL
+
+---
+
+#### FR-7: Response Handling
+- The system must return a success response with file URL
+- The system must return appropriate error responses when needed
+
+---
+
+### 3.2 Non-Functional Requirements
+
+#### NFR-1: Performance
+- Music generation should complete within a reasonable time
+
+#### NFR-2: Reliability
+- The system must handle errors without crashing
+
+#### NFR-3: Scalability
+- The system should support multiple user requests
+
+#### NFR-4: Maintainability
+- Backend components must be modular (AI, Audio, Data)
+
+#### NFR-5: Security
+- Only authenticated users can access the system
+- Input must be validated
+
+---
+
+### 3.3 System Features
+
+#### Feature 1: User Authentication
+- Login validation
+- Session or token handling
+
+---
+
+#### Feature 2: Music Generation
+- Input Pokemon name
+- Generate AI-based music
+- Return MP3 output
+
+---
+
+#### Feature 3: Audio Processing
+- Merge and normalize audio
+- Encode final output
+
+---
+
+#### Feature 4: Storage Management
+- Save generated files
+- Provide access to files
+
+---
+
+## 4. Error Handling Requirements
+
+- The system must return errors for:
+    - Invalid input
+    - Unauthorized access
+    - Missing Pokemon data
+    - Processing failures
+
+---
+
+## 5. Assumptions and Dependencies
+
+- Pokemon cry dataset is available
+- AI model is accessible
+- Storage system is available
+
+---
+
+## 6. Summary
+
+The backend system must:
+
+- Authenticate users
+- Process Pokemon cry data
+- Generate AI-based music
+- Output a valid MP3 file
+- Return results reliably and securely
