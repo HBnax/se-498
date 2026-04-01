@@ -30,7 +30,7 @@ public class PokemonController : ControllerBase
     public async Task<ActionResult<Pokemon>> GetPokemonByName(string name)
     {
         var pokemon = await dbContext.Pokemon
-            .FirstOrDefaultAsync(p + > p.Name.ToLower() == name.ToLower());
+            .FirstOrDefaultAsync(p => p.Name.ToLower() == name.ToLower());
 
         if (pokemon == null)
         {
@@ -41,7 +41,7 @@ public class PokemonController : ControllerBase
     }
 
     [HttpPost]
-    public Task<ActionResult<object>> CreatePokemon([FromBody] CreatePokemonRequest request)
+    public async Task<ActionResult<object>> CreatePokemon([FromBody] CreatePokemonRequest request)
     {
         if (string.IsNullOrWhiteSpace(request.Name) || string.IsNullOrWhiteSpace(request.Cry))
         {
