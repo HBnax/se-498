@@ -19,15 +19,12 @@ jobs:
         uses: actions/setup-dotnet@v5
         with:
           dotnet-version: '8.0.x'
-          
-      - name: Confirm Workflow is Running
-        run: echo "Workflow is running successfully!"
+      
+      - name: Restore dependencies
+        run: dotnet restore api/pitchamon.Api/pitchamon.Api.csproj
 
-#      - name: Restore dependencies
-#        run: dotnet restore
-#
-#      - name: Build
-#        run: dotnet build --no-restore --configuration Release
+      - name: Build
+        run: dotnet build api/pitchamon.Api/pitchamon.Api.csproj --no-restore --configuration Release
 #
 #      - name: Run Tests
 #        run: dotnet test --no-build --configuration Release
