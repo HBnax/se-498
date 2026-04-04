@@ -17,7 +17,7 @@ services:
   db:
     image: postgres:latest
     environment:
-      POSTGRES_DB: pokemon
+      POSTGRES_DB: pokemon_cries
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
     ports:
