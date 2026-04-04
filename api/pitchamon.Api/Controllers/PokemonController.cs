@@ -40,6 +40,32 @@ public class PokemonController : ControllerBase
         return Ok(pokemon);
     }
 
+    [HttpGet("{name}/cry")]
+    public async Task<IActionResult> GetPokemonCry(string name)
+    {
+        var pokemon = await dbContext.Pokemon
+            .FirstOrDefaultAsync(p => p.Name.ToLower() == name.ToLower());
+
+        if (pokemon == null)
+        {
+            return NotFound(new { error = "Pokemon not found" });
+        }
+
+        var filePath = Path.Combine(
+            Directory.GetCurrentDirectory(),
+            "Assets",
+            "Cries",
+            pokemon.Cry
+            );
+
+        if (!System.IO.File.Exists(filePath))
+        {
+            return NotFound(new { error = "Cry file not found" });
+        }
+        
+        return PhysicalFile(filePath, "audio/wav", pokemon.Cry);
+    }
+
     [HttpPost]
     public async Task<ActionResult<object>> CreatePokemon([FromBody] CreatePokemonRequest request)
     {
