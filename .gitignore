@@ -15,10 +15,5 @@
 /httpRequests/
 # IDE files
 .idea/
-# .NET build folders
 bin/
 obj/
-# OS files
-.DS_Store
-# Logs
-*.log
