@@ -3,30 +3,37 @@
 ## Overview
 This API provides Pokémon cry data for the original 151 Pokémon
 
-## Authorization
-All endpoints require a **Bearer Token**
+## Headers
+- **Authorization:** Bearer {token} 
+- **Content Type:** application/json
+
+## Base URL
+https://localhost:8080
 
 ## Endpoints
 ### GET All Pokémon
-`GET /pokemon`: returns all cry data for all 151 Pokémon
+`GET /pokemon`: returns cry data for all supported Pokémon
 #### **Parameters:**
-- None
+None
 #### **Responses:**
 -  `200 OK`
 ```
 {
   "pokemon": [
     {
+      "id": 025,
       "name": "Pikachu",
-      "cry": 025.wav
+      "cry": "025.wav"
     },
     {
+      "id": 4,
       "name": "Charmander",
-      "cry": 004.wav
+      "cry": "004.wav"
     },
     {
+      "id": 1,
       "name": "Bulbasaur",
-      "cry": 001.wav
+      "cry": "001.wav"
     },
     ...
   ]
@@ -39,16 +46,17 @@ All endpoints require a **Bearer Token**
 }
 ```
 ### GET Individual Pokémon 
-`GET /pokemon/{name}`: returns cry data for a specfic Pokémon
+`GET /pokemon/{name}`: returns cry data for a specific Pokémon
 #### **Parameters:**
-    - `name` (string, required)
-    - Example: `GET /pokemon/pikachu`
+    - name (string, required)
+    Example: `GET /pokemon/pikachu`
 #### **Responses:**
 -  `200 OK`
 ```
 {
+  "id": 025,
   "name": "Pikachu",
-  "cry": 025.wav
+  "cry": "025.wav"
 }
 ```
 - `404 Not Found`
@@ -80,7 +88,7 @@ All endpoints require a **Bearer Token**
   "pokemon": {
     "id": 025,
     "name": "Pikachu",
-    "cry": 025.wav
+    "cry": "025.wav"
   }
 }
 ```
@@ -102,5 +110,4 @@ All endpoints require a **Bearer Token**
     "error": "Pokémon already exists"
 }
 ```
-This is a test
 
