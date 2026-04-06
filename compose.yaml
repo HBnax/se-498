@@ -1,0 +1,51 @@
+services:
+  pitchamon.api:
+    image: pitchamon.api
+    build:
+      context: .
+      dockerfile: api/pitchamon.Api/Dockerfile
+    environment:
+      - ConnectionStrings__DefaultConnection=Host=db;Database=pokemon;Username=postgres;Password=postgres
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://0.0.0.0:8080
+    depends_on:
+      db:
+        condition: service_healthy
+    ports:
+      - "8080:8080"
+      
+  db:
+    image: postgres:latest
+    environment:
+      POSTGRES_DB: pokemon_cries
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 2s
+      timeout: 3s
+      retries: 30
+      start_period: 5s
+      
+  backend-db:
+    image: postgres:16
+    environment:
+      POSTGRES_DB: pitchamon
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+    ports:
+      - "5433:5432"
+    volumes:
+      - backend-postgres-data:/var/lib/postgresql/data
+      - ./backend-db/init.sql:/docker-entrypoint-initdb.d/init.sql:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 2s
+      timeout: 3s
+      retries: 30
+      start_period: 5s
+      
+volumes:
+  backend-postgres-data:
