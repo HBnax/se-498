@@ -46,6 +46,14 @@ services:
       timeout: 3s
       retries: 30
       start_period: 5s
-      
+
+  frontend:
+    build: ./frontend/pitchamon
+    ports:
+      - "5173:5173"
+    volumes:
+      - ./frontend/pitchamon:/app
+      - /app/node_modules
+
 volumes:
   backend-postgres-data:
