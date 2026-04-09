@@ -13,7 +13,7 @@ services:
         condition: service_healthy
     ports:
       - "8080:8080"
-      
+
   db:
     image: postgres:latest
     environment:
@@ -28,7 +28,7 @@ services:
       timeout: 3s
       retries: 30
       start_period: 5s
-      
+
   backend-db:
     image: postgres:16
     environment:
@@ -54,6 +54,8 @@ services:
     volumes:
       - ./frontend/pitchamon:/app
       - /app/node_modules
+    depends_on:
+      - pitchamon.api
 
 volumes:
   backend-postgres-data:
