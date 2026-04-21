@@ -16,7 +16,7 @@ builder.Services.AddSingleton<TemporaryFileService>();
 //              .AllowAnyMethod();
 //    });
 //});
-//builder.Services.AddHttpClient<PokemonApiClient>();
+builder.Services.AddHttpClient<PokemonApiClient>();
 
 var app = builder.Build();
 

@@ -9,10 +9,14 @@ namespace pitchamon.Backend.Controllers;
 public class ProcessController : ControllerBase
 {
     private readonly TemporaryFileService temporaryFileService;
+    private readonly PokemonApiClient pokemonApiClient;
 
-    public ProcessController(TemporaryFileService tempfileService)
+    public ProcessController(
+        TemporaryFileService tempfileService,
+        PokemonApiClient apiClient)
     {
         temporaryFileService = tempfileService;
+        pokemonApiClient = apiClient;
     }
     
     [HttpPost]
@@ -38,7 +42,9 @@ public class ProcessController : ControllerBase
         }
        
         var savedPath = await temporaryFileService.SaveUploadedFile(request.Song);
-        
+
+        var cryBytes = await pokemonApiClient.GetCry(request.PokemonName);
+        var cryPath = await temporaryFileService.SaveBytes(cryBytes, ".wav");
         //processing logic
 
         return Ok(new
@@ -47,7 +53,9 @@ public class ProcessController : ControllerBase
 			pokemonName = request.PokemonName,
             originalFileName = request.Song.FileName,
 			savedPath,
-			fileSize = request.Song.Length
+            cryPath,
+			fileSize = request.Song.Length,
+            crySize = cryBytes.Length,
         });
     }
 }

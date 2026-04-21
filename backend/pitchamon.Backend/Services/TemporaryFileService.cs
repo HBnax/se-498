@@ -14,4 +14,16 @@ public class TemporaryFileService
         
         return filePath;
     }
+
+	public async Task<string> SaveBytes(byte[] data, string extension)
+	{
+		var tempFolder = Path.Combine(Path.GetTempPath(), "pitchamon_temp");
+		Directory.CreateDirectory(tempFolder);
+
+		var filePath = Path.Combine(tempFolder, $"{Guid.NewGuid()}{extension}");
+		await File.WriteAllBytesAsync(filePath, data);
+
+		return filePath;
+	}
+
 }
