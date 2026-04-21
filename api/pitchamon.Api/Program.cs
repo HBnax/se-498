@@ -30,7 +30,7 @@ builder.Services.AddSwaggerGen(options =>
             Scheme = "bearer",
             BearerFormat = "Token",
             In = ParameterLocation.Header,
-            Description = "Enter: Bearer {your token here}"
+            Description = "Enter token only. Do not include 'Bearer' prefix."
         });
 
         options.AddSecurityRequirement(new OpenApiSecurityRequirement
