@@ -1,8 +1,16 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 using pitchamon.Api.Data;
+using Microsoft.AspNetCore.Authentication;
+using pitchamon.Api.Auth;
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Services
+    .AddAuthentication("Bearer")
+    .AddScheme<AuthenticationSchemeOptions, BearerAuthService>("Bearer", null);
+
+builder.Services.AddAuthorization();
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
@@ -13,6 +21,31 @@ builder.Services.AddSwaggerGen(options =>
             Title = "151 Pokémon API",
             Version = "v1",
             Description = "API for the original 151 Pokémon cry sounds"
+        });
+        
+        options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+        {
+            Name = "Authorization",
+            Type = SecuritySchemeType.Http,
+            Scheme = "bearer",
+            BearerFormat = "Token",
+            In = ParameterLocation.Header,
+            Description = "Enter: Bearer {your token here}"
+        });
+
+        options.AddSecurityRequirement(new OpenApiSecurityRequirement
+        {
+            {
+                new OpenApiSecurityScheme
+                {
+                    Reference = new OpenApiReference
+                    {
+                        Type = ReferenceType.SecurityScheme,
+                        Id = "Bearer"
+                    }
+                },
+                new string[] { }
+            }
         });
     });
 
@@ -35,6 +68,8 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+app.UseAuthentication();
+app.UseAuthorization();
 app.MapControllers();
 
 app.Run();
