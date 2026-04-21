@@ -1,3 +1,4 @@
+<<<<<<< Updated upstream
 @import "tailwindcss";
 :root {
   --text: #6b6375;
@@ -49,10 +50,33 @@
   #social .button-icon {
     filter: invert(1) brightness(2);
   }
+=======
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&family=IBM+Plex+Mono:wght@400;500&display=swap');
+
+:root {
+  --pm-bg: #0D1117;
+  --pm-surface: #161B22;
+  --pm-border: #30363D;
+  --pm-text: #F0F6FC;
+  --pm-muted: #8B949E;
+  --pm-gold: #FFD700;
+  --pm-red: #FF3C3C;
+  --font-display: 'Press Start 2P', system-ui, sans-serif;
+  --font-mono: 'IBM Plex Mono', ui-monospace, monospace;
+}
+
+html,
+body,
+#root {
+  min-height: 100vh;
+  background-color: var(--pm-bg);
+  color: var(--pm-text);
+>>>>>>> Stashed changes
 }
 
 body {
   margin: 0;
+<<<<<<< Updated upstream
 }
 
 #root {
@@ -110,3 +134,148 @@ code {
   padding: 4px 8px;
   background: var(--code-bg);
 }
+=======
+  font-family: var(--font-mono);
+}
+
+.font-display {
+  font-family: var(--font-display);
+  letter-spacing: 0.05em;
+}
+
+.font-mono {
+  font-family: var(--font-mono);
+}
+
+.pm-bg { background-color: var(--pm-bg) !important; }
+.pm-surface { background-color: var(--pm-surface) !important; }
+.pm-text { color: var(--pm-text) !important; }
+.pm-muted { color: var(--pm-muted) !important; }
+.pm-gold { color: var(--pm-gold) !important; }
+.pm-red { color: var(--pm-red) !important; }
+.pm-border { border-color: var(--pm-border) !important; }
+
+.pm-input {
+  background-color: var(--pm-bg);
+  border: 1px solid var(--pm-border);
+  color: var(--pm-text);
+  font-family: var(--font-mono);
+}
+.pm-input:focus {
+  background-color: var(--pm-bg);
+  border-color: var(--pm-gold);
+  color: var(--pm-text);
+  box-shadow: 0 0 0 0.2rem rgba(255, 215, 0, 0.15);
+  outline: none;
+}
+.pm-input::placeholder { color: var(--pm-muted); }
+
+.pm-btn-gold {
+  border: 2px solid var(--pm-gold);
+  color: var(--pm-gold);
+  background-color: transparent;
+  font-family: var(--font-display);
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  transition: all 0.2s;
+}
+.pm-btn-gold:hover:not(:disabled) {
+  background-color: var(--pm-gold);
+  color: var(--pm-bg);
+}
+.pm-btn-gold:disabled {
+  border-color: var(--pm-border);
+  color: var(--pm-border);
+  cursor: not-allowed;
+}
+
+.pm-btn-outline {
+  border: 1px solid var(--pm-border);
+  color: var(--pm-text);
+  background-color: transparent;
+  font-family: var(--font-mono);
+  transition: all 0.2s;
+}
+.pm-btn-outline:hover:not(:disabled) {
+  border-color: var(--pm-gold);
+  color: var(--pm-gold);
+}
+
+.pm-dropzone {
+  background-color: var(--pm-surface);
+  border: 2px dashed var(--pm-border);
+  border-radius: 0.5rem;
+  min-height: 12rem;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.pm-dropzone:hover { border-color: rgba(255, 215, 0, 0.5); }
+.pm-dropzone.is-active,
+.pm-dropzone.has-file { border-color: var(--pm-gold); border-style: dashed; }
+.pm-dropzone.is-active { background-color: rgba(255, 215, 0, 0.08); }
+
+.pm-card {
+  background-color: var(--pm-surface);
+  border: 1px solid var(--pm-border);
+  border-radius: 0.5rem;
+}
+
+.pm-pixel-img { image-rendering: pixelated; }
+
+.pm-sprite-xs { width: 1.75rem; height: 1.75rem; }
+.pm-sprite-sm { width: 2rem; height: 2rem; }
+.pm-sprite-md { width: 3rem; height: 3rem; }
+.pm-sprite-lg { width: 7.5rem; height: 7.5rem; }
+
+.pm-tracking-wide { letter-spacing: 0.2em; }
+
+.pm-dropdown {
+  position: absolute;
+  top: calc(100% + 0.25rem);
+  left: 0;
+  right: 0;
+  z-index: 20;
+  background-color: var(--pm-surface);
+  border: 1px solid var(--pm-border);
+  border-radius: 0.5rem;
+  overflow: hidden;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+}
+.pm-dropdown-list { max-height: 16rem; overflow-y: auto; list-style: none; margin: 0; padding: 0; }
+.pm-dropdown-item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.5rem 0.75rem;
+  cursor: pointer;
+  color: var(--pm-text);
+  font-family: var(--font-mono);
+  font-size: 0.875rem;
+  transition: background-color 0.15s;
+}
+.pm-dropdown-item:hover { background-color: rgba(255, 215, 0, 0.1); color: var(--pm-gold); }
+.pm-dropdown-item.is-selected { background-color: rgba(255, 60, 60, 0.15); color: var(--pm-red); }
+
+.pm-play-btn {
+  width: 1.75rem;
+  height: 1.75rem;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--pm-border);
+  color: var(--pm-muted);
+  background: transparent;
+  font-size: 0.75rem;
+  flex-shrink: 0;
+  transition: all 0.15s;
+}
+.pm-play-btn:hover { border-color: var(--pm-gold); color: var(--pm-gold); }
+.pm-play-btn.is-playing { background-color: var(--pm-gold); color: var(--pm-bg); border-color: var(--pm-gold); }
+
+@keyframes pm-dance {
+  0%,100% { transform: translateY(0) rotate(-4deg); }
+  50%     { transform: translateY(-8px) rotate(4deg); }
+}
+.pm-dance { animation: pm-dance 0.8s ease-in-out infinite; }
+>>>>>>> Stashed changes
