@@ -67,15 +67,16 @@ jobs:
           ASPNETCORE_ENVIRONMENT: Development
           ASPNETCORE_URLS: http://0.0.0.0:8080
           ConnectionStrings__DefaultConnection: Host=localhost;Port=5432;Database=pokemon_cries;Username=postgres;Password=password
+          Auth__BearerToken: ci-test-token
         run: |
           dotnet run --project api/pitchamon.Api/pitchamon.Api.csproj > api.log 2>&1 &
           sleep 20
 
       - name: Verify API endpoint works
-        run: curl --fail http://localhost:8080/pokemon
+        run: 'curl --fail -H "Authorization: ci-test-token" http://localhost:8080/pokemon'
 
       - name: Verify cry endpoint works
-        run: curl --fail http://localhost:8080/pokemon/pikachu/cry --output 025.wav
+        run: 'curl --fail -H "Authorization: ci-test-token" http://localhost:8080/pokemon/pikachu/cry --output 025.wav'
 
       - name: Show API log on failure
         if: failure()
