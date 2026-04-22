@@ -73,10 +73,10 @@ jobs:
           sleep 20
 
       - name: Verify API endpoint works
-        run: 'curl --fail -H "Authorization: ci-test-token" http://localhost:8080/pokemon'
+        run: 'curl --fail -H "Authorization: Bearer ci-test-token" http://localhost:8080/pokemon'
 
       - name: Verify cry endpoint works
-        run: 'curl --fail -H "Authorization: ci-test-token" http://localhost:8080/pokemon/pikachu/cry --output 025.wav'
+        run: 'curl --fail -H "Authorization: Bearer ci-test-token" http://localhost:8080/pokemon/pikachu/cry --output 025.wav'
 
       - name: Show API log on failure
         if: failure()
