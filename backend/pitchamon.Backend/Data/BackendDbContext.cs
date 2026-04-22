@@ -10,6 +10,7 @@ public class BackendDbContext : DbContext
     }
 
     public DbSet<User> Users => Set<User>();
+    public DbSet<ProcessingHistory> ProcessingHistory => Set<ProcessingHistory>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -35,6 +36,42 @@ public class BackendDbContext : DbContext
                 .HasMaxLength(255);
 
             entity.Property(u => u.CreatedAt)
+                .HasColumnName("created_at")
+                .HasDefaultValueSql("CURRENT_TIMESTAMP")
+                .ValueGeneratedOnAdd();
+        });
+
+        modelBuilder.Entity<ProcessingHistory>(entity =>
+        {
+            entity.ToTable("processing_history");
+
+            entity.HasKey(p => p.Id);
+
+            entity.Property(p => p.Id)
+                .HasColumnName("id");
+
+            entity.Property(p => p.UserId)
+                .HasColumnName("user_id");
+
+            entity.Property(p => p.OriginalSongFile)
+                .HasColumnName("original_song_file")
+                .IsRequired();
+
+            entity.Property(p => p.PokemonUsed)
+                .HasColumnName("pokemon_used")
+                .IsRequired()
+                .HasMaxLength(255);
+
+            entity.Property(p => p.CryFileUsed)
+                .HasColumnName("cry_file_used")
+                .IsRequired()
+                .HasMaxLength(255);
+
+            entity.Property(p => p.ProcessedSongFile)
+                .HasColumnName("processed_song_file")
+                .IsRequired();
+
+            entity.Property(p => p.CreatedAt)
                 .HasColumnName("created_at")
                 .HasDefaultValueSql("CURRENT_TIMESTAMP")
                 .ValueGeneratedOnAdd();
