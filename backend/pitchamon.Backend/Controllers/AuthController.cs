@@ -53,4 +53,40 @@ public class AuthController : ControllerBase
             }
         });
     }
+
+    [HttpPost("login")]
+    public async Task<IActionResult> Login([FromBody] LoginRequest request)
+    {
+        if (string.IsNullOrWhiteSpace(request.Email) || string.IsNullOrWhiteSpace(request.Password))
+        {
+            return BadRequest(new { error = "Email and password are required." });
+        }
+        
+        var email = request.Email.Trim().ToLowerInvariant();
+        
+        var user = await dbContext.Users.FirstOrDefaultAsync(u => u.Email == email);
+
+        if (user == null)
+        {
+            return Unauthorized(new { error = "User not found" });
+        }
+        
+        var validPassword = BCrypt.Net.BCrypt.Verify(request.Password, user.PasswordHash);
+        
+        if (!validPassword)
+        {
+            return Unauthorized(new { error = "Invalid password" });
+        }
+
+        return Ok(new
+        {
+            message = "Login successful.",
+            user = new
+            {
+                user.Id,
+                user.Email,
+                user.CreatedAt
+            }
+        });
+    }
 }
