@@ -2,11 +2,13 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using pitchamon.Api.Data;
 using pitchamon.Api.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace pitchamon.Api.Controllers;
 
 [ApiController]
 [Route("pokemon")]
+[Authorize]
 public class PokemonController : ControllerBase
 {
     private readonly AppDbContext dbContext;
