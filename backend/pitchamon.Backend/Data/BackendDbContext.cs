@@ -35,7 +35,9 @@ public class BackendDbContext : DbContext
                 .HasMaxLength(255);
 
             entity.Property(u => u.CreatedAt)
-                .HasColumnName("created_at");
+                .HasColumnName("created_at")
+                .HasDefaultValueSql("CURRENT_TIMESTAMP")
+                .ValueGeneratedOnAdd();
         });
     }
 }
