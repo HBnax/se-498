@@ -1,5 +1,6 @@
 import { useState, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
+import AuthModal from '../components/AuthModal'
 
 const POKEMON = [
   'Bulbasaur','Ivysaur','Venusaur','Charmander','Charmeleon','Charizard',
@@ -46,6 +47,7 @@ export default function HomePage() {
   const [dropdownOpen, setDropdownOpen] = useState(false)
   const [dragOver, setDragOver] = useState(false)
   const [playingPokemon, setPlayingPokemon] = useState('')
+  const [authMode, setAuthMode] = useState(null)
 
   const filtered = POKEMON.filter(p =>
     p.toLowerCase().includes(search.toLowerCase())
@@ -90,7 +92,22 @@ export default function HomePage() {
   const canTranspose = mp3File && selectedPokemon
 
   return (
-    <div className="min-h-screen bg-[#0D1117] flex flex-col items-center px-6 py-12">
+    <div className="min-h-screen bg-[#0D1117] flex flex-col items-center px-6 py-12 relative">
+      <div className="absolute top-6 right-6 flex items-center gap-3">
+        <button
+          onClick={() => setAuthMode('login')}
+          className="font-mono text-xs tracking-widest uppercase px-4 py-2 rounded-lg border-2 border-[#FFD700] text-[#FFD700] hover:bg-[#FFD700] hover:text-[#0D1117] transition-colors"
+        >
+          Log In
+        </button>
+        <button
+          onClick={() => setAuthMode('signup')}
+          className="font-mono text-xs tracking-widest uppercase px-4 py-2 rounded-lg border-2 border-[#FFD700] text-[#FFD700] hover:bg-[#FFD700] hover:text-[#0D1117] transition-colors"
+        >
+          Sign Up
+        </button>
+      </div>
+
       <div className="mb-10 text-center">
         <h1 className="font-display text-4xl md:text-5xl text-[#FFD700] tracking-wide">PITCHAMON</h1>
         <p className="font-mono text-[#8B949E] text-sm mt-2 tracking-widest">"Pitch 'em All!"</p>
@@ -197,6 +214,14 @@ export default function HomePage() {
         <p className="font-mono text-[#8B949E] text-xs mt-3">
           {!mp3File && !selectedPokemon ? 'Upload an MP3 and select a Pokémon to begin' : !mp3File ? 'Upload an MP3 to continue' : 'Select a Pokémon to continue'}
         </p>
+      )}
+
+      {authMode && (
+        <AuthModal
+          mode={authMode}
+          onClose={() => setAuthMode(null)}
+          onSwitchMode={setAuthMode}
+        />
       )}
     </div>
   )
