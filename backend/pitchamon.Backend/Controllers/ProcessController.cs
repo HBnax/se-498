@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using pitchamon.Backend.Models;
 using pitchamon.Backend.Services;
+using pitchamon.Backend.Data;
 
 namespace pitchamon.Backend.Controllers;
 
@@ -10,13 +11,16 @@ public class ProcessController : ControllerBase
 {
     private readonly TemporaryFileService temporaryFileService;
     private readonly PokemonApiClient pokemonApiClient;
+    private readonly BackendDbContext dbContext;
 
     public ProcessController(
         TemporaryFileService tempfileService,
-        PokemonApiClient apiClient)
+        PokemonApiClient apiClient,
+        BackendDbContext context)
     {
         temporaryFileService = tempfileService;
         pokemonApiClient = apiClient;
+        dbContext = context;
     }
     
     [HttpPost]
@@ -45,8 +49,26 @@ public class ProcessController : ControllerBase
 
         var cryBytes = await pokemonApiClient.GetCry(request.PokemonName);
         var cryPath = await temporaryFileService.SaveBytes(cryBytes, ".wav");
+        // var outputPath = await processingRunner.ProcessSong(savedPath, cryPath);
+        
         //processing logic
 
+        // if (request.UserId.HasValue)
+        // {
+        //     var history = new ProcessingHistory
+        //     {
+        //         UserId = request.UserId.Value,
+        //         OriginalSongFile = savedPath,
+        //         PokemonUsed = request.PokemonName,
+        //         CryFileUsed = cryPath,
+        //         //ProcessedSongFile = outputPath,
+        //         CreatedAt = DateTime.UtcNow
+        //     };
+        //     
+        //     dbContext.ProcessingHistory.Add(history);
+        //     await dbContext.SaveChangesAsync();
+        // }
+        
         return Ok(new
         {
             message = "Song upload successful",
