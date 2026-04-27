@@ -1,3 +1,5 @@
+using System.Net.Http.Headers;
+
 namespace pitchamon.Backend.Services;
 
 public class PokemonApiClient
@@ -16,7 +18,21 @@ public class PokemonApiClient
     public async Task<byte[]> GetCry(string pokemonName)
     {
         var baseUrl = configuration["PokemonApi:BaseUrl"] ?? "http://localhost:8080";
-        var response = await httpClient.GetAsync($"{baseUrl}/pokemon/{pokemonName}/cry");
+        var bearerToken = configuration["PokemonApi:BearerToken"];
+
+        if (string.IsNullOrEmpty(bearerToken))
+        {
+            throw new Exception("Bearer token for Pokemon API is not configured.");
+        }
+
+        using var request = new HttpRequestMessage(
+            HttpMethod.Get,
+            $"{baseUrl}/pokemon/{pokemonName}/cry"
+        );
+        
+        request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", bearerToken);
+        
+        var response = await httpClient.SendAsync(request);
         
         if(!response.IsSuccessStatusCode)
         {
