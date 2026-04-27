@@ -49,64 +49,75 @@ export default function ResultsPage() {
   }
 
   return (
-    <div className="min-h-screen bg-[#0D1117] flex flex-col items-center justify-center px-6 py-12">
-
-      <h1 className="font-display text-2xl md:text-3xl text-[#FFD700] tracking-wide mb-10 text-center">
+    <div className="min-vh-100 pm-bg d-flex flex-column align-items-center justify-content-center px-3 py-5">
+      <h1 className="font-display pm-gold text-center mb-5" style={{ fontSize: 'clamp(1.25rem, 3vw, 1.875rem)' }}>
         PITCHAMON COMPLETE!
       </h1>
 
-      <div className="w-full max-w-2xl grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+      <div className="container" style={{ maxWidth: '640px' }}>
+        <div className="row g-4 align-items-center">
+          <div className="col-12 col-md-6">
+            <div className="d-flex flex-column gap-3">
+              <p className="font-mono pm-text mb-0">{outputName}</p>
 
-        {/* Left: result info */}
-        <div className="flex flex-col gap-4">
-          <p className="font-mono text-[#F0F6FC] text-base">{outputName}</p>
+              <div className="pm-card d-flex align-items-center gap-3 px-3 py-2 rounded-pill">
+                <button
+                  type="button"
+                  className="pm-play-btn"
+                  style={{ borderColor: 'var(--pm-gold)', color: 'var(--pm-gold)', width: '2rem', height: '2rem' }}
+                >
+                  ▶
+                </button>
+                <div className="progress flex-grow-1" style={{ height: '4px', backgroundColor: 'var(--pm-border)' }}>
+                  <div
+                    className="progress-bar"
+                    role="progressbar"
+                    style={{ width: '33%', backgroundColor: 'var(--pm-gold)' }}
+                    aria-valuenow="33"
+                    aria-valuemin="0"
+                    aria-valuemax="100"
+                  />
+                </div>
+                <span className="font-mono pm-muted flex-shrink-0" style={{ fontSize: '0.75rem' }}>0:00</span>
+              </div>
 
-          {/* Placeholder audio player */}
-          <div className="flex items-center gap-3 bg-[#161B22] border border-[#30363D] rounded-full px-4 py-3">
-            <button className="w-8 h-8 rounded-full border border-[#FFD700] flex items-center justify-center text-[#FFD700] hover:bg-[#FFD700] hover:text-[#0D1117] transition-all flex-shrink-0">
-              ▶
-            </button>
-            <div className="flex-1 h-1 bg-[#30363D] rounded-full overflow-hidden">
-              <div className="h-full w-1/3 bg-[#FFD700] rounded-full" />
+              <a
+                href="#"
+                onClick={(e) => e.preventDefault()}
+                className="btn pm-btn-gold py-2 text-decoration-none"
+              >
+                DOWNLOAD
+              </a>
+
+              <button
+                type="button"
+                onClick={() => navigate('/')}
+                className="btn pm-btn-outline py-2"
+              >
+                New Pitchamon
+              </button>
             </div>
-            <span className="font-mono text-[#8B949E] text-xs flex-shrink-0">0:00</span>
           </div>
 
-          {/* Download */}
-          <a
-            href="#"
-            onClick={(e) => e.preventDefault()}
-            className="flex items-center justify-center gap-2 border-2 border-[#FFD700] text-[#FFD700] font-display tracking-widest text-sm rounded-lg px-6 py-3 hover:bg-[#FFD700] hover:text-[#0D1117] transition-all active:scale-95"
-          >
-            DOWNLOAD
-          </a>
-
-          {/* New Pitchamon */}
-          <button
-            onClick={() => navigate('/')}
-            className="flex items-center justify-center gap-2 border border-[#30363D] text-[#8B949E] font-mono text-sm rounded-lg px-6 py-3 hover:border-[#8B949E] hover:text-[#F0F6FC] transition-all active:scale-95"
-          >
-            New Pitchamon
-          </button>
-        </div>
-
-        {/* Right: dancing sprite */}
-        <div className="flex flex-col items-center justify-center gap-4">
-          <div
-            style={{
-              transform: bounce ? 'translateY(-8px) rotate(-4deg)' : 'translateY(0px) rotate(4deg)',
-              transition: 'transform 0.4s ease-in-out',
-            }}
-          >
-            <img
-              src={spriteUrl}
-              alt={pokemon}
-              style={{ imageRendering: 'pixelated', width: 120, height: 120 }}
-            />
+          <div className="col-12 col-md-6 d-flex flex-column align-items-center justify-content-center gap-3">
+            <div
+              style={{
+                transform: bounce ? 'translateY(-8px) rotate(-4deg)' : 'translateY(0px) rotate(4deg)',
+                transition: 'transform 0.4s ease-in-out',
+              }}
+            >
+              <img
+                src={spriteUrl}
+                alt={pokemon}
+                className="pm-pixel-img"
+                style={{ width: '120px', height: '120px' }}
+              />
+            </div>
+            <span className="font-mono pm-muted pm-tracking-wide" style={{ fontSize: '0.75rem' }}>
+              {pokemon?.toUpperCase()}
+            </span>
           </div>
-          <span className="font-mono text-[#8B949E] text-xs tracking-widest">{pokemon?.toUpperCase()}</span>
         </div>
-
       </div>
     </div>
   )

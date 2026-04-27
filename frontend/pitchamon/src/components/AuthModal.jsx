@@ -15,86 +15,169 @@ export default function AuthModal({ mode, onClose, onSwitchMode }) {
   }
 
   return (
-    <div
-      onClick={onClose}
-      className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm px-4"
-    >
+    <>
       <div
-        onClick={(e) => e.stopPropagation()}
-        className="w-full max-w-md bg-[#161B22] border border-[#30363D] rounded-lg shadow-2xl p-8 relative"
+        className="modal fade show d-block"
+        tabIndex="-1"
+        role="dialog"
+        onClick={onClose}
+        style={{ zIndex: 1060 }}
       >
-        <button
-          onClick={onClose}
-          className="absolute top-3 right-3 w-8 h-8 flex items-center justify-center text-[#8B949E] hover:text-[#FFD700] transition-colors font-mono"
-          aria-label="Close"
+        <div
+          className="modal-dialog modal-dialog-centered"
+          role="document"
+          onClick={(e) => e.stopPropagation()}
         >
-          ✕
-        </button>
-
-        <h2 className="font-display text-2xl text-[#FFD700] tracking-wide text-center mb-1">
-          {isSignup ? 'SIGN UP' : 'LOG IN'}
-        </h2>
-        <p className="font-mono text-[#8B949E] text-xs text-center tracking-widest mb-6">
-          {isSignup ? 'Create a new trainer account' : 'Welcome back, trainer'}
-        </p>
-
-        <form onSubmit={handleSubmit} className="flex flex-col gap-4">
-          <div className="flex flex-col gap-1">
-            <label className="font-mono text-[#8B949E] text-xs tracking-widest uppercase">Username</label>
-            <input
-              type="text"
-              required
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
-              className="h-11 px-3 bg-[#0D1117] border border-[#30363D] rounded-lg font-mono text-sm text-[#F0F6FC] placeholder-[#8B949E] outline-none focus:border-[#FFD700] transition-colors"
-              placeholder="ashketchum"
-            />
-          </div>
-
-          {isSignup && (
-            <div className="flex flex-col gap-1">
-              <label className="font-mono text-[#8B949E] text-xs tracking-widest uppercase">Email</label>
-              <input
-                type="email"
-                required
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                className="h-11 px-3 bg-[#0D1117] border border-[#30363D] rounded-lg font-mono text-sm text-[#F0F6FC] placeholder-[#8B949E] outline-none focus:border-[#FFD700] transition-colors"
-                placeholder="ash@pallet.town"
+          <div
+            className="modal-content border-0 shadow-lg"
+            style={{ backgroundColor: '#161B22', border: '1px solid #30363D' }}
+          >
+            <div className="modal-header border-0 pb-0">
+              <h2
+                className="modal-title w-100 text-center"
+                style={{
+                  fontFamily: 'var(--font-display, inherit)',
+                  color: '#FFD700',
+                  letterSpacing: '0.05em',
+                }}
+              >
+                {isSignup ? 'SIGN UP' : 'LOG IN'}
+              </h2>
+              <button
+                type="button"
+                className="btn-close btn-close-white position-absolute"
+                style={{ top: '1rem', right: '1rem' }}
+                aria-label="Close"
+                onClick={onClose}
               />
             </div>
-          )}
 
-          <div className="flex flex-col gap-1">
-            <label className="font-mono text-[#8B949E] text-xs tracking-widest uppercase">Password</label>
-            <input
-              type="password"
-              required
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              className="h-11 px-3 bg-[#0D1117] border border-[#30363D] rounded-lg font-mono text-sm text-[#F0F6FC] placeholder-[#8B949E] outline-none focus:border-[#FFD700] transition-colors"
-              placeholder="••••••••"
-            />
+            <div className="modal-body px-4 pb-4">
+              <p
+                className="text-center text-uppercase mb-4 small"
+                style={{ color: '#8B949E', letterSpacing: '0.2em', fontFamily: 'monospace' }}
+              >
+                {isSignup ? 'Create a new trainer account' : 'Welcome back, trainer'}
+              </p>
+
+              <form onSubmit={handleSubmit}>
+                <div className="mb-3">
+                  <label
+                    className="form-label text-uppercase small"
+                    style={{ color: '#8B949E', letterSpacing: '0.2em', fontFamily: 'monospace' }}
+                  >
+                    Username
+                  </label>
+                  <input
+                    type="text"
+                    required
+                    value={username}
+                    onChange={(e) => setUsername(e.target.value)}
+                    className="form-control"
+                    style={{
+                      backgroundColor: '#0D1117',
+                      border: '1px solid #30363D',
+                      color: '#F0F6FC',
+                      fontFamily: 'monospace',
+                    }}
+                    placeholder="ashketchum"
+                  />
+                </div>
+
+                {isSignup && (
+                  <div className="mb-3">
+                    <label
+                      className="form-label text-uppercase small"
+                      style={{ color: '#8B949E', letterSpacing: '0.2em', fontFamily: 'monospace' }}
+                    >
+                      Email
+                    </label>
+                    <input
+                      type="email"
+                      required
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      className="form-control"
+                      style={{
+                        backgroundColor: '#0D1117',
+                        border: '1px solid #30363D',
+                        color: '#F0F6FC',
+                        fontFamily: 'monospace',
+                      }}
+                      placeholder="ash@pallet.town"
+                    />
+                  </div>
+                )}
+
+                <div className="mb-4">
+                  <label
+                    className="form-label text-uppercase small"
+                    style={{ color: '#8B949E', letterSpacing: '0.2em', fontFamily: 'monospace' }}
+                  >
+                    Password
+                  </label>
+                  <input
+                    type="password"
+                    required
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    className="form-control"
+                    style={{
+                      backgroundColor: '#0D1117',
+                      border: '1px solid #30363D',
+                      color: '#F0F6FC',
+                      fontFamily: 'monospace',
+                    }}
+                    placeholder="••••••••"
+                  />
+                </div>
+
+                <button
+                  type="submit"
+                  className="btn w-100 text-uppercase py-2"
+                  style={{
+                    border: '2px solid #FFD700',
+                    color: '#FFD700',
+                    backgroundColor: 'transparent',
+                    letterSpacing: '0.2em',
+                    fontWeight: 600,
+                  }}
+                  onMouseOver={(e) => {
+                    e.currentTarget.style.backgroundColor = '#FFD700'
+                    e.currentTarget.style.color = '#0D1117'
+                  }}
+                  onMouseOut={(e) => {
+                    e.currentTarget.style.backgroundColor = 'transparent'
+                    e.currentTarget.style.color = '#FFD700'
+                  }}
+                >
+                  {isSignup ? 'Create Account' : 'Log In'}
+                </button>
+              </form>
+
+              <p
+                className="text-center mt-4 mb-0 small"
+                style={{ color: '#8B949E', fontFamily: 'monospace' }}
+              >
+                {isSignup ? 'Already have an account?' : "Don't have an account?"}{' '}
+                <button
+                  type="button"
+                  className="btn btn-link p-0 text-uppercase small align-baseline"
+                  style={{ color: '#FF3C3C', letterSpacing: '0.2em', textDecoration: 'none' }}
+                  onClick={() => onSwitchMode(isSignup ? 'login' : 'signup')}
+                >
+                  {isSignup ? 'Log in' : 'Sign up'}
+                </button>
+              </p>
+            </div>
           </div>
-
-          <button
-            type="submit"
-            className="mt-2 font-display tracking-widest text-base px-8 py-3 rounded-lg border-2 border-[#FFD700] text-[#FFD700] hover:bg-[#FFD700] hover:text-[#0D1117] transition-all duration-200 active:scale-95"
-          >
-            {isSignup ? 'CREATE ACCOUNT' : 'LOG IN'}
-          </button>
-        </form>
-
-        <p className="font-mono text-[#8B949E] text-xs text-center mt-6">
-          {isSignup ? 'Already have an account?' : "Don't have an account?"}{' '}
-          <button
-            onClick={() => onSwitchMode(isSignup ? 'login' : 'signup')}
-            className="text-[#FF3C3C] hover:text-[#FFD700] transition-colors uppercase tracking-widest"
-          >
-            {isSignup ? 'Log in' : 'Sign up'}
-          </button>
-        </p>
+        </div>
       </div>
-    </div>
+      <div
+        className="modal-backdrop fade show"
+        style={{ zIndex: 1050 }}
+        onClick={onClose}
+      />
+    </>
   )
 }

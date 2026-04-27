@@ -92,129 +92,174 @@ export default function HomePage() {
   const canTranspose = mp3File && selectedPokemon
 
   return (
-    <div className="min-h-screen bg-[#0D1117] flex flex-col items-center px-6 py-12 relative">
-      <div className="absolute top-6 right-6 flex items-center gap-3">
+    <div className="min-vh-100 pm-bg position-relative px-3 py-5 d-flex flex-column align-items-center">
+      <div className="position-absolute top-0 end-0 d-flex gap-2 p-4">
         <button
+          type="button"
+          className="btn btn-sm pm-btn-gold"
           onClick={() => setAuthMode('login')}
-          className="font-mono text-xs tracking-widest uppercase px-4 py-2 rounded-lg border-2 border-[#FFD700] text-[#FFD700] hover:bg-[#FFD700] hover:text-[#0D1117] transition-colors"
         >
           Log In
         </button>
         <button
+          type="button"
+          className="btn btn-sm pm-btn-gold"
           onClick={() => setAuthMode('signup')}
-          className="font-mono text-xs tracking-widest uppercase px-4 py-2 rounded-lg border-2 border-[#FFD700] text-[#FFD700] hover:bg-[#FFD700] hover:text-[#0D1117] transition-colors"
         >
           Sign Up
         </button>
       </div>
 
-      <div className="mb-10 text-center">
-        <h1 className="font-display text-4xl md:text-5xl text-[#FFD700] tracking-wide">PITCHAMON</h1>
-        <p className="font-mono text-[#8B949E] text-sm mt-2 tracking-widest">"Pitch 'em All!"</p>
+      <div className="text-center mb-5">
+        <h1 className="font-display pm-gold display-5 mb-2">PITCHAMON</h1>
+        <p className="font-mono pm-muted small pm-tracking-wide mb-0">"Pitch 'em All!"</p>
       </div>
 
-      <div className="w-full max-w-3xl grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-
-        <div className="flex flex-col gap-2">
-          <label className="font-mono text-[#8B949E] text-xs tracking-widest uppercase">Add MP3</label>
-          <div
-            onClick={() => fileInputRef.current.click()}
-            onDragOver={(e) => { e.preventDefault(); setDragOver(true) }}
-            onDragLeave={() => setDragOver(false)}
-            onDrop={handleDrop}
-            className={`flex flex-col items-center justify-center border-2 border-dashed rounded-lg h-48 cursor-pointer transition-all ${dragOver ? 'border-[#FFD700] bg-[#FFD700]/10' : mp3File ? 'border-[#FFD700] bg-[#161B22]' : 'border-[#30363D] bg-[#161B22] hover:border-[#FFD700]/50'}`}
-          >
-            {mp3File ? (
-              <>
-                <span className="text-3xl mb-2">🎵</span>
-                <span className="font-mono text-[#FFD700] text-sm text-center px-4 break-all">{mp3File.name}</span>
-                <span className="font-mono text-[#8B949E] text-xs mt-1">Click to change</span>
-              </>
-            ) : (
-              <>
-                <span className="text-4xl mb-3 text-[#30363D]">+</span>
-                <span className="font-mono text-[#8B949E] text-sm">Click or drag an MP3 here</span>
-              </>
-            )}
-          </div>
-          <input ref={fileInputRef} type="file" accept=".mp3,audio/mpeg" className="hidden" onChange={(e) => handleFile(e.target.files[0])} />
-        </div>
-
-        <div className="flex flex-col gap-2">
-          <label className="font-mono text-[#8B949E] text-xs tracking-widest uppercase">Add Pokémon</label>
-          <div className="relative">
-            <button
-              onClick={() => setDropdownOpen(!dropdownOpen)}
-              className={`w-full h-12 px-4 flex items-center justify-between border rounded-lg font-mono text-sm transition-all ${selectedPokemon ? 'border-[#FF3C3C] text-[#F0F6FC] bg-[#161B22]' : 'border-[#30363D] text-[#8B949E] bg-[#161B22] hover:border-[#FFD700]/50'}`}
+      <div className="container" style={{ maxWidth: '760px' }}>
+        <div className="row g-4 mb-4">
+          <div className="col-12 col-md-6">
+            <label className="form-label font-mono pm-muted small pm-tracking-wide text-uppercase">
+              Add MP3
+            </label>
+            <div
+              onClick={() => fileInputRef.current.click()}
+              onDragOver={(e) => { e.preventDefault(); setDragOver(true) }}
+              onDragLeave={() => setDragOver(false)}
+              onDrop={handleDrop}
+              className={`pm-dropzone d-flex flex-column align-items-center justify-content-center ${dragOver ? 'is-active' : ''} ${mp3File ? 'has-file' : ''}`}
             >
-              {selectedPokemon ? (
-                <div className="flex items-center gap-2">
-                  <img src={spriteUrl(selectedPokemon)} alt={selectedPokemon} className="w-7 h-7" style={{ imageRendering: 'pixelated' }} />
-                  <span>{selectedPokemon}</span>
-                </div>
-              ) : <span>Select...</span>}
-              <span className={`transition-transform ${dropdownOpen ? 'rotate-180' : ''}`}>▾</span>
-            </button>
+              {mp3File ? (
+                <>
+                  <span className="mb-2" style={{ fontSize: '1.75rem' }}>🎵</span>
+                  <span className="font-mono pm-gold small text-break text-center px-3">{mp3File.name}</span>
+                  <span className="font-mono pm-muted mt-1" style={{ fontSize: '0.75rem' }}>Click to change</span>
+                </>
+              ) : (
+                <>
+                  <span className="mb-3" style={{ fontSize: '2rem', color: 'var(--pm-border)' }}>+</span>
+                  <span className="font-mono pm-muted small">Click or drag an MP3 here</span>
+                </>
+              )}
+            </div>
+            <input
+              ref={fileInputRef}
+              type="file"
+              accept=".mp3,audio/mpeg"
+              className="d-none"
+              onChange={(e) => handleFile(e.target.files[0])}
+            />
+          </div>
 
-            {dropdownOpen && (
-              <div className="absolute z-10 w-full mt-1 bg-[#161B22] border border-[#30363D] rounded-lg overflow-hidden shadow-xl">
-                <div className="p-2 border-b border-[#30363D]">
-                  <div className="flex items-center gap-2 bg-[#0D1117] rounded px-3 py-2">
-                    <span className="text-[#8B949E] text-xs">🔍</span>
-                    <input autoFocus type="text" placeholder="Search..." value={search} onChange={(e) => setSearch(e.target.value)} className="bg-transparent font-mono text-sm text-[#F0F6FC] outline-none w-full placeholder-[#8B949E]" />
+          <div className="col-12 col-md-6">
+            <label className="form-label font-mono pm-muted small pm-tracking-wide text-uppercase">
+              Add Pokémon
+            </label>
+            <div className="position-relative">
+              <button
+                type="button"
+                onClick={() => setDropdownOpen(!dropdownOpen)}
+                className={`btn w-100 d-flex align-items-center justify-content-between pm-btn-outline ${selectedPokemon ? '' : 'pm-muted'}`}
+                style={{
+                  height: '3rem',
+                  borderColor: selectedPokemon ? 'var(--pm-red)' : 'var(--pm-border)',
+                  backgroundColor: 'var(--pm-surface)',
+                  color: selectedPokemon ? 'var(--pm-text)' : 'var(--pm-muted)',
+                  fontFamily: 'var(--font-mono)',
+                }}
+              >
+                {selectedPokemon ? (
+                  <span className="d-flex align-items-center gap-2">
+                    <img src={spriteUrl(selectedPokemon)} alt={selectedPokemon} className="pm-pixel-img pm-sprite-xs" />
+                    <span>{selectedPokemon}</span>
+                  </span>
+                ) : (
+                  <span>Select...</span>
+                )}
+                <span style={{ transform: dropdownOpen ? 'rotate(180deg)' : 'none', transition: 'transform 0.2s' }}>▾</span>
+              </button>
+
+              {dropdownOpen && (
+                <div className="pm-dropdown">
+                  <div className="p-2 border-bottom" style={{ borderColor: 'var(--pm-border)' }}>
+                    <div className="d-flex align-items-center gap-2 px-3 py-2 rounded" style={{ backgroundColor: 'var(--pm-bg)' }}>
+                      <span className="pm-muted small">🔍</span>
+                      <input
+                        autoFocus
+                        type="text"
+                        placeholder="Search..."
+                        value={search}
+                        onChange={(e) => setSearch(e.target.value)}
+                        className="form-control form-control-sm border-0 bg-transparent pm-text font-mono p-0"
+                      />
+                    </div>
                   </div>
-                </div>
-                <ul className="max-h-64 overflow-y-auto">
-                  {filtered.length === 0 && <li className="px-4 py-3 font-mono text-sm text-[#8B949E]">No Pokémon found</li>}
-                  {filtered.map((p) => (
-                    <li
-                      key={p}
-                      onClick={() => { setSelectedPokemon(p); setDropdownOpen(false); setSearch('') }}
-                      className={`flex items-center gap-3 px-3 py-2 cursor-pointer transition-colors ${selectedPokemon === p ? 'bg-[#FF3C3C]/20 text-[#FF3C3C]' : 'text-[#F0F6FC] hover:bg-[#FFD700]/10 hover:text-[#FFD700]'}`}
-                    >
-                      <img src={spriteUrl(p)} alt={p} className="w-8 h-8 flex-shrink-0" style={{ imageRendering: 'pixelated' }} />
-                      <span className="font-mono text-sm flex-1">{p}</span>
-                      <button
-                        onClick={(e) => handlePlay(e, p)}
-                        className={`w-7 h-7 rounded-full flex items-center justify-center border transition-all flex-shrink-0 text-xs ${playingPokemon === p ? 'border-[#FFD700] bg-[#FFD700] text-[#0D1117]' : 'border-[#30363D] text-[#8B949E] hover:border-[#FFD700] hover:text-[#FFD700]'}`}
+                  <ul className="pm-dropdown-list">
+                    {filtered.length === 0 && (
+                      <li className="px-3 py-2 font-mono small pm-muted">No Pokémon found</li>
+                    )}
+                    {filtered.map((p) => (
+                      <li
+                        key={p}
+                        onClick={() => { setSelectedPokemon(p); setDropdownOpen(false); setSearch('') }}
+                        className={`pm-dropdown-item ${selectedPokemon === p ? 'is-selected' : ''}`}
                       >
-                        {playingPokemon === p ? '■' : '▶'}
-                      </button>
-                    </li>
-                  ))}
-                </ul>
+                        <img src={spriteUrl(p)} alt={p} className="pm-pixel-img pm-sprite-sm flex-shrink-0" />
+                        <span className="flex-grow-1">{p}</span>
+                        <button
+                          type="button"
+                          onClick={(e) => handlePlay(e, p)}
+                          className={`pm-play-btn ${playingPokemon === p ? 'is-playing' : ''}`}
+                        >
+                          {playingPokemon === p ? '■' : '▶'}
+                        </button>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+            </div>
+
+            {selectedPokemon && (
+              <div
+                className="pm-card d-flex align-items-center gap-3 px-3 py-2 mt-2"
+                style={{ borderColor: 'rgba(255, 60, 60, 0.3)' }}
+              >
+                <img src={spriteUrl(selectedPokemon)} alt={selectedPokemon} className="pm-pixel-img pm-sprite-md" />
+                <span className="font-mono pm-text small flex-grow-1">{selectedPokemon}</span>
+                <button
+                  type="button"
+                  onClick={(e) => handlePlay(e, selectedPokemon)}
+                  className={`pm-play-btn ${playingPokemon === selectedPokemon ? 'is-playing' : ''}`}
+                  style={{ borderColor: playingPokemon === selectedPokemon ? 'var(--pm-gold)' : 'var(--pm-red)', color: playingPokemon === selectedPokemon ? 'var(--pm-bg)' : 'var(--pm-red)' }}
+                >
+                  {playingPokemon === selectedPokemon ? '■' : '▶'}
+                </button>
               </div>
             )}
           </div>
+        </div>
 
-          {selectedPokemon && (
-            <div className="mt-2 flex items-center gap-3 bg-[#161B22] border border-[#FF3C3C]/30 rounded-lg px-4 py-3">
-              <img src={spriteUrl(selectedPokemon)} alt={selectedPokemon} className="w-12 h-12" style={{ imageRendering: 'pixelated' }} />
-              <span className="font-mono text-[#F0F6FC] text-sm flex-1">{selectedPokemon}</span>
-              <button
-                onClick={(e) => handlePlay(e, selectedPokemon)}
-                className={`w-8 h-8 rounded-full flex items-center justify-center border transition-all text-xs ${playingPokemon === selectedPokemon ? 'border-[#FFD700] bg-[#FFD700] text-[#0D1117]' : 'border-[#FF3C3C] text-[#FF3C3C] hover:bg-[#FF3C3C] hover:text-white'}`}
-              >
-                {playingPokemon === selectedPokemon ? '■' : '▶'}
-              </button>
-            </div>
+        <div className="d-flex flex-column align-items-center">
+          <button
+            type="button"
+            onClick={handleTranspose}
+            disabled={!canTranspose}
+            className="btn btn-lg pm-btn-gold px-5 py-3"
+          >
+            TRANSPOSE
+          </button>
+
+          {!canTranspose && (
+            <p className="font-mono pm-muted small mt-3 mb-0">
+              {!mp3File && !selectedPokemon
+                ? 'Upload an MP3 and select a Pokémon to begin'
+                : !mp3File
+                  ? 'Upload an MP3 to continue'
+                  : 'Select a Pokémon to continue'}
+            </p>
           )}
         </div>
       </div>
-
-      <button
-        onClick={handleTranspose}
-        disabled={!canTranspose}
-        className={`font-display tracking-widest text-lg px-16 py-4 rounded-lg border-2 transition-all duration-200 ${canTranspose ? 'border-[#FFD700] text-[#FFD700] hover:bg-[#FFD700] hover:text-[#0D1117] cursor-pointer active:scale-95' : 'border-[#30363D] text-[#30363D] cursor-not-allowed'}`}
-      >
-        TRANSPOSE
-      </button>
-
-      {!canTranspose && (
-        <p className="font-mono text-[#8B949E] text-xs mt-3">
-          {!mp3File && !selectedPokemon ? 'Upload an MP3 and select a Pokémon to begin' : !mp3File ? 'Upload an MP3 to continue' : 'Select a Pokémon to continue'}
-        </p>
-      )}
 
       {authMode && (
         <AuthModal
