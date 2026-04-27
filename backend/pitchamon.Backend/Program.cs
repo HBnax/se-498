@@ -1,4 +1,6 @@
 using pitchamon.Backend.Services;
+using Microsoft.EntityFrameworkCore;
+using pitchamon.Backend.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -6,7 +8,12 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+builder.Services.AddDbContext<BackendDbContext>(options =>
+	options.UseNpgsql(connectionString));
+
 builder.Services.AddSingleton<TemporaryFileService>();
+builder.Services.AddHttpClient<PokemonApiClient>();
 //builder.Services.AddCors(options =>
 //{
 //    options.AddPolicy("FrontendPolicy", policy =>
@@ -16,7 +23,6 @@ builder.Services.AddSingleton<TemporaryFileService>();
 //              .AllowAnyMethod();
 //    });
 //});
-builder.Services.AddHttpClient<PokemonApiClient>();
 
 var app = builder.Build();
 

@@ -110,3 +110,6 @@ code {
   padding: 4px 8px;
   background: var(--code-bg);
 }
+
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&family=IBM+Plex+Mono:wght@400;500&display=swap');
+@import "tailwindcss";
