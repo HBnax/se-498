@@ -1,6 +1,5 @@
 ﻿using System.Diagnostics;
 
-
 public class AudioProcessor
 {
     private readonly string pythonPath = "python";

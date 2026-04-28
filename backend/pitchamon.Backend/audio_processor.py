@@ -73,7 +73,6 @@ def process_audio(vocal_path, cry_path,
 
 if __name__ == "__main__":
     import sys
-    print("Does this work")
     # Read input paths from command line
     vocal = sys.argv[1]
     cry = sys.argv[2]

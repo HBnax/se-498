@@ -12,6 +12,7 @@ public class ProcessController : ControllerBase
     private readonly TemporaryFileService temporaryFileService;
     private readonly PokemonApiClient pokemonApiClient;
     private readonly BackendDbContext dbContext;
+	AudioProcessor audioProcessor = new AudioProcessor();
 
     public ProcessController(
         TemporaryFileService tempfileService,
@@ -49,10 +50,10 @@ public class ProcessController : ControllerBase
 
         var cryBytes = await pokemonApiClient.GetCry(request.PokemonName);
         var cryPath = await temporaryFileService.SaveBytes(cryBytes, ".wav");
-        // var outputPath = await processingRunner.ProcessSong(savedPath, cryPath);
-        
-        //processing logic
-
+		
+		var outputPath = audioProcessor.ProcessAudio(savedPath, cryPath);
+       
+		// adding to processed song db
         // if (request.UserId.HasValue)
         // {
         //     var history = new ProcessingHistory
@@ -76,8 +77,7 @@ public class ProcessController : ControllerBase
             originalFileName = request.Song.FileName,
 			savedPath,
             cryPath,
-			fileSize = request.Song.Length,
-            crySize = cryBytes.Length,
+			outputPath
         });
     }
 }
