@@ -54,29 +54,26 @@ public class ProcessController : ControllerBase
 		var outputPath = audioProcessor.ProcessAudio(savedPath, cryPath);
        
 		// adding to processed song db
-        // if (request.UserId.HasValue)
-        // {
-        //     var history = new ProcessingHistory
-        //     {
-        //         UserId = request.UserId.Value,
-        //         OriginalSongFile = savedPath,
-        //         PokemonUsed = request.PokemonName,
-        //         CryFileUsed = cryPath,
-        //         //ProcessedSongFile = outputPath,
-        //         CreatedAt = DateTime.UtcNow
-        //     };
-        //     
-        //     dbContext.ProcessingHistory.Add(history);
-        //     await dbContext.SaveChangesAsync();
-        // }
+         if (request.UserId.HasValue)
+         {
+             var history = new ProcessingHistory
+             {
+                 UserId = request.UserId.Value,
+                 OriginalSongFile = request.Song.FileName,
+                 PokemonUsed = request.PokemonName,
+                 CreatedAt = DateTime.UtcNow
+             };
+             
+             dbContext.ProcessingHistory.Add(history);
+             await dbContext.SaveChangesAsync();
+        }
         
         return Ok(new
         {
             message = "Song upload successful",
+			userId = request.UserId,
 			pokemonName = request.PokemonName,
             originalFileName = request.Song.FileName,
-			savedPath,
-            cryPath,
 			outputPath
         });
     }
