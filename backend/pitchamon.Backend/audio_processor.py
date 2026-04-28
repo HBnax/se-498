@@ -75,10 +75,9 @@ if __name__ == "__main__":
     import sys
     print("Does this work")
     # Read input paths from command line
-    # vocal = sys.argv[1]
-    # cry = sys.argv[2]
+    vocal = sys.argv[1]
+    cry = sys.argv[2]
 
     # Process and print output file path
-    # out_path = process_audio(vocal, cry)
-    # print(out_path)
-    # print("Wnat ")
+    out_path = process_audio(vocal, cry)
+    print(out_path)
