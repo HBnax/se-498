@@ -67,13 +67,17 @@ services:
       retries: 30
       start_period: 5s
 
-#  frontend:
-#    build: ./frontend
-#    ports:
-#      - "5173:5173"
-#    depends_on:
-#      - pitchamon.api
-#      - backend
+  frontend:
+    image: pitchamon.frontend
+    build: 
+      context: ./frontend/pitchamon
+      dockerfile: Dockerfile
+    environment:
+      - VITE_BACKEND_URL=http://localhost:8081
+    depends_on:
+      - backend
+    ports:
+      - "5173:5173"
 
 volumes:
   api-postgres-data:
