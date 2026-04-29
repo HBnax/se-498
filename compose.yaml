@@ -5,7 +5,7 @@ services:
       context: .
       dockerfile: api/pitchamon.Api/Dockerfile
     environment:
-      - ConnectionStrings__DefaultConnection=Host=db;Port:5432;Database=pokemon;Username=postgres;Password=postgres
+      - ConnectionStrings__DefaultConnection=Host=db;Port=5432;Database=pokemon;Username=postgres;Password=postgres
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_URLS=http://0.0.0.0:8080
       - Auth__BearerToken=${AUTH_BEARER_TOKEN}
@@ -36,7 +36,7 @@ services:
       context: .
       dockerfile: backend/pitchamon.Backend/Dockerfile
     environment:
-        - ConnectionStrings__DefaultConnection=Host=backend-db;Port:5433;Database=pitchamon;Username=postgres;Password=password
+        - ConnectionStrings__DefaultConnection=Host=backend-db;Port=5432;Database=pitchamon;Username=postgres;Password=password
         - PokemonApi__BaseUrl=http://pitchamon.api:8080
         - PokemonApi__BearerToken=${AUTH_BEARER_TOKEN}
         - ASPNETCORE_ENVIRONMENT=Development
