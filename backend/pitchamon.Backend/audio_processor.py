@@ -3,6 +3,7 @@ import numpy as np
 import soundfile as sf
 import sys
 import io
+import os
 
 
 def process_audio(vocal_path, cry_path,
@@ -67,17 +68,11 @@ def process_audio(vocal_path, cry_path,
     # Normalize output audio
     output = output / (np.max(np.abs(output)) + 1e-6)
 
-    # # Save result to file
-    # output_path = "output.wav"
-    # sf.write(output_path, output, sr_s)
-    # 
-    # return output_path
-    buf = io.BytesIO()
-    sf.write(buf, output, sr_s, format='WAV')
-    buf.seek(0)
-    
-    sys.stdout.buffer.write(buf.read())
-
+    # Save result to file
+    output_path = "output.wav"
+    sf.write(output_path, output, sr_s)
+    absolute_path = os.path.abspath(output_path)
+    return absolute_path
 
 if __name__ == "__main__":
     import sys
@@ -86,4 +81,5 @@ if __name__ == "__main__":
     cry = sys.argv[2]
 
     # Process and print output file path
-    process_audio(vocal, cry)
+    output_path = process_audio(vocal, cry)
+    print(output_path)
