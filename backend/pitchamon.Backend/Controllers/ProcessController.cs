@@ -51,9 +51,10 @@ public class ProcessController : ControllerBase
         var cryBytes = await pokemonApiClient.GetCry(request.PokemonName);
         var cryPath = await temporaryFileService.SaveBytes(cryBytes, ".wav");
 		
-		var outputPath = audioProcessor.ProcessAudio(savedPath, cryPath);
-       
-		// adding to processed song db
+        // returning output Byte
+		var outputByte = audioProcessor.ProcessAudio(savedPath, cryPath);
+		
+        // adding to processed song db
          if (request.UserId.HasValue)
          {
              var history = new ProcessingHistory
@@ -67,14 +68,14 @@ public class ProcessController : ControllerBase
              dbContext.ProcessingHistory.Add(history);
              await dbContext.SaveChangesAsync();
         }
-        
+        // TODO: lets make sure this is the proper way
         return Ok(new
         {
             message = "Song upload successful",
 			userId = request.UserId,
 			pokemonName = request.PokemonName,
             originalFileName = request.Song.FileName,
-			outputPath
+            outputByte
         });
     }
 }
