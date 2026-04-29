@@ -130,7 +130,7 @@ jobs:
     name: Build Frontend
     runs-on: unbuntu-latest
     
-    defautls:
+    defaults:
       run:
         working-directory: frontend/pitchamon
         
