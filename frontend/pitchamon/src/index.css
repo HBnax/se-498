@@ -1,115 +1,164 @@
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&family=IBM+Plex+Mono:wght@400;500&display=swap');
 @import "tailwindcss";
+
 :root {
-  --text: #6b6375;
-  --text-h: #08060d;
-  --bg: #fff;
-  --border: #e5e4e7;
-  --code-bg: #f4f3ec;
-  --accent: #aa3bff;
-  --accent-bg: rgba(170, 59, 255, 0.1);
-  --accent-border: rgba(170, 59, 255, 0.5);
-  --social-bg: rgba(244, 243, 236, 0.5);
-  --shadow:
-    rgba(0, 0, 0, 0.1) 0 10px 15px -3px, rgba(0, 0, 0, 0.05) 0 4px 6px -2px;
+  --pm-bg: #0D1117;
+  --pm-surface: #161B22;
+  --pm-border: #30363D;
+  --pm-text: #F0F6FC;
+  --pm-muted: #8B949E;
+  --pm-gold: #FFD700;
+  --pm-red: #FF3C3C;
 
-  --sans: system-ui, 'Segoe UI', Roboto, sans-serif;
-  --heading: system-ui, 'Segoe UI', Roboto, sans-serif;
-  --mono: ui-monospace, Consolas, monospace;
+  --font-display: 'Press Start 2P', system-ui, sans-serif;
+  --font-mono: 'IBM Plex Mono', ui-monospace, Consolas, monospace;
 
-  font: 18px/145% var(--sans);
-  letter-spacing: 0.18px;
-  color-scheme: light dark;
-  color: var(--text);
-  background: var(--bg);
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
+  color-scheme: dark;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-
-  @media (max-width: 1024px) {
-    font-size: 16px;
-  }
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --text: #9ca3af;
-    --text-h: #f3f4f6;
-    --bg: #16171d;
-    --border: #2e303a;
-    --code-bg: #1f2028;
-    --accent: #c084fc;
-    --accent-bg: rgba(192, 132, 252, 0.15);
-    --accent-border: rgba(192, 132, 252, 0.5);
-    --social-bg: rgba(47, 48, 58, 0.5);
-    --shadow:
-      rgba(0, 0, 0, 0.4) 0 10px 15px -3px, rgba(0, 0, 0, 0.25) 0 4px 6px -2px;
-  }
-
-  #social .button-icon {
-    filter: invert(1) brightness(2);
-  }
 }
 
 body {
   margin: 0;
+  background-color: var(--pm-bg);
+  color: var(--pm-text);
+  font-family: var(--font-mono);
 }
 
-#root {
-  width: 1126px;
-  max-width: 100%;
-  margin: 0 auto;
-  text-align: center;
-  border-inline: 1px solid var(--border);
-  min-height: 100svh;
-  display: flex;
-  flex-direction: column;
-  box-sizing: border-box;
+.pm-bg { background-color: var(--pm-bg); }
+.pm-surface { background-color: var(--pm-surface); }
+.pm-text { color: var(--pm-text); }
+.pm-muted { color: var(--pm-muted); }
+.pm-gold { color: var(--pm-gold); }
+.pm-red { color: var(--pm-red); }
+.pm-tracking-wide { letter-spacing: 0.2em; }
+
+.font-display { font-family: var(--font-display); letter-spacing: 0.05em; }
+.font-mono { font-family: var(--font-mono); }
+
+.pm-btn-gold {
+  border: 2px solid var(--pm-gold);
+  color: var(--pm-gold);
+  background-color: transparent;
+  font-family: var(--font-display);
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  transition: all 0.2s ease;
+}
+.pm-btn-gold:hover:not(:disabled) {
+  background-color: var(--pm-gold);
+  color: var(--pm-bg);
+}
+.pm-btn-gold:active:not(:disabled) { transform: scale(0.97); }
+.pm-btn-gold:disabled {
+  border-color: var(--pm-border);
+  color: var(--pm-border);
+  cursor: not-allowed;
 }
 
-h1,
-h2 {
-  font-family: var(--heading);
-  font-weight: 500;
-  color: var(--text-h);
+.pm-btn-outline {
+  border: 1px solid var(--pm-border);
+  background-color: var(--pm-surface);
+  color: var(--pm-text);
+  font-family: var(--font-mono);
+  transition: border-color 0.2s ease;
+}
+.pm-btn-outline:hover { border-color: var(--pm-gold); }
+
+.pm-card {
+  background-color: var(--pm-surface);
+  border: 1px solid var(--pm-border);
+  border-radius: 0.5rem;
 }
 
-h1 {
-  font-size: 56px;
-  letter-spacing: -1.68px;
-  margin: 32px 0;
-  @media (max-width: 1024px) {
-    font-size: 36px;
-    margin: 20px 0;
-  }
+.pm-dropzone {
+  border: 2px dashed var(--pm-border);
+  background-color: var(--pm-surface);
+  border-radius: 0.5rem;
+  height: 12rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
 }
-h2 {
-  font-size: 24px;
-  line-height: 118%;
-  letter-spacing: -0.24px;
-  margin: 0 0 8px;
-  @media (max-width: 1024px) {
-    font-size: 20px;
-  }
+.pm-dropzone:hover { border-color: rgba(255, 215, 0, 0.5); }
+.pm-dropzone.is-active {
+  border-color: var(--pm-gold);
+  background-color: rgba(255, 215, 0, 0.1);
 }
-p {
+.pm-dropzone.has-file {
+  border-color: var(--pm-gold);
+  border-style: solid;
+}
+
+.pm-dropdown {
+  position: absolute;
+  z-index: 10;
+  width: 100%;
+  margin-top: 0.25rem;
+  background-color: var(--pm-surface);
+  border: 1px solid var(--pm-border);
+  border-radius: 0.5rem;
+  overflow: hidden;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+}
+.pm-dropdown-list {
+  list-style: none;
   margin: 0;
+  padding: 0;
+  max-height: 16rem;
+  overflow-y: auto;
+}
+.pm-dropdown-item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.5rem 0.75rem;
+  cursor: pointer;
+  color: var(--pm-text);
+  font-family: var(--font-mono);
+  font-size: 0.875rem;
+  transition: background-color 0.15s ease, color 0.15s ease;
+}
+.pm-dropdown-item:hover {
+  background-color: rgba(255, 215, 0, 0.1);
+  color: var(--pm-gold);
+}
+.pm-dropdown-item.is-selected {
+  background-color: rgba(255, 60, 60, 0.2);
+  color: var(--pm-red);
 }
 
-code,
-.counter {
-  font-family: var(--mono);
+.pm-play-btn {
+  width: 1.75rem;
+  height: 1.75rem;
+  border-radius: 9999px;
   display: inline-flex;
-  border-radius: 4px;
-  color: var(--text-h);
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--pm-border);
+  background-color: transparent;
+  color: var(--pm-muted);
+  font-size: 0.7rem;
+  flex-shrink: 0;
+  transition: all 0.15s ease;
+}
+.pm-play-btn:hover {
+  border-color: var(--pm-gold);
+  color: var(--pm-gold);
+}
+.pm-play-btn.is-playing {
+  border-color: var(--pm-gold);
+  background-color: var(--pm-gold);
+  color: var(--pm-bg);
 }
 
-code {
-  font-size: 15px;
-  line-height: 135%;
-  padding: 4px 8px;
-  background: var(--code-bg);
-}
+.pm-pixel-img { image-rendering: pixelated; }
+.pm-sprite-xs { width: 1.75rem; height: 1.75rem; }
+.pm-sprite-sm { width: 2rem; height: 2rem; }
+.pm-sprite-md { width: 3rem; height: 3rem; }
 
-@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&family=IBM+Plex+Mono:wght@400;500&display=swap');
-@import "tailwindcss";
+.form-control.bg-transparent { color: var(--pm-text); }
+.form-control.bg-transparent::placeholder { color: var(--pm-muted); }
+.form-control:focus {
+  box-shadow: 0 0 0 0.2rem rgba(255, 215, 0, 0.15);
+  border-color: var(--pm-gold);
+}
