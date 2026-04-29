@@ -18,3 +18,10 @@
 bin/
 obj/
 .env
+.claude/tsc-cache/3da3912c-ffbc-442c-b5d6-e3daa48a3396/affected-repos.txt
+.claude/tsc-cache/3da3912c-ffbc-442c-b5d6-e3daa48a3396/affected-repos.txt
+/.claude
+.claude/tsc-cache/3da3912c-ffbc-442c-b5d6-e3daa48a3396/affected-repos.txt
+.claude/tsc-cache/3da3912c-ffbc-442c-b5d6-e3daa48a3396/edited-files.log
+.claude/tsc-cache/3da3912c-ffbc-442c-b5d6-e3daa48a3396/affected-repos.txt
+.claude/tsc-cache/3da3912c-ffbc-442c-b5d6-e3daa48a3396/edited-files.log

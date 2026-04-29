@@ -1,2 +1,164 @@
 @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&family=IBM+Plex+Mono:wght@400;500&display=swap');
 @import "tailwindcss";
+
+:root {
+  --pm-bg: #0D1117;
+  --pm-surface: #161B22;
+  --pm-border: #30363D;
+  --pm-text: #F0F6FC;
+  --pm-muted: #8B949E;
+  --pm-gold: #FFD700;
+  --pm-red: #FF3C3C;
+
+  --font-display: 'Press Start 2P', system-ui, sans-serif;
+  --font-mono: 'IBM Plex Mono', ui-monospace, Consolas, monospace;
+
+  color-scheme: dark;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  margin: 0;
+  background-color: var(--pm-bg);
+  color: var(--pm-text);
+  font-family: var(--font-mono);
+}
+
+.pm-bg { background-color: var(--pm-bg); }
+.pm-surface { background-color: var(--pm-surface); }
+.pm-text { color: var(--pm-text); }
+.pm-muted { color: var(--pm-muted); }
+.pm-gold { color: var(--pm-gold); }
+.pm-red { color: var(--pm-red); }
+.pm-tracking-wide { letter-spacing: 0.2em; }
+
+.font-display { font-family: var(--font-display); letter-spacing: 0.05em; }
+.font-mono { font-family: var(--font-mono); }
+
+.pm-btn-gold {
+  border: 2px solid var(--pm-gold);
+  color: var(--pm-gold);
+  background-color: transparent;
+  font-family: var(--font-display);
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  transition: all 0.2s ease;
+}
+.pm-btn-gold:hover:not(:disabled) {
+  background-color: var(--pm-gold);
+  color: var(--pm-bg);
+}
+.pm-btn-gold:active:not(:disabled) { transform: scale(0.97); }
+.pm-btn-gold:disabled {
+  border-color: var(--pm-border);
+  color: var(--pm-border);
+  cursor: not-allowed;
+}
+
+.pm-btn-outline {
+  border: 1px solid var(--pm-border);
+  background-color: var(--pm-surface);
+  color: var(--pm-text);
+  font-family: var(--font-mono);
+  transition: border-color 0.2s ease;
+}
+.pm-btn-outline:hover { border-color: var(--pm-gold); }
+
+.pm-card {
+  background-color: var(--pm-surface);
+  border: 1px solid var(--pm-border);
+  border-radius: 0.5rem;
+}
+
+.pm-dropzone {
+  border: 2px dashed var(--pm-border);
+  background-color: var(--pm-surface);
+  border-radius: 0.5rem;
+  height: 12rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+.pm-dropzone:hover { border-color: rgba(255, 215, 0, 0.5); }
+.pm-dropzone.is-active {
+  border-color: var(--pm-gold);
+  background-color: rgba(255, 215, 0, 0.1);
+}
+.pm-dropzone.has-file {
+  border-color: var(--pm-gold);
+  border-style: solid;
+}
+
+.pm-dropdown {
+  position: absolute;
+  z-index: 10;
+  width: 100%;
+  margin-top: 0.25rem;
+  background-color: var(--pm-surface);
+  border: 1px solid var(--pm-border);
+  border-radius: 0.5rem;
+  overflow: hidden;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+}
+.pm-dropdown-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  max-height: 16rem;
+  overflow-y: auto;
+}
+.pm-dropdown-item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.5rem 0.75rem;
+  cursor: pointer;
+  color: var(--pm-text);
+  font-family: var(--font-mono);
+  font-size: 0.875rem;
+  transition: background-color 0.15s ease, color 0.15s ease;
+}
+.pm-dropdown-item:hover {
+  background-color: rgba(255, 215, 0, 0.1);
+  color: var(--pm-gold);
+}
+.pm-dropdown-item.is-selected {
+  background-color: rgba(255, 60, 60, 0.2);
+  color: var(--pm-red);
+}
+
+.pm-play-btn {
+  width: 1.75rem;
+  height: 1.75rem;
+  border-radius: 9999px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--pm-border);
+  background-color: transparent;
+  color: var(--pm-muted);
+  font-size: 0.7rem;
+  flex-shrink: 0;
+  transition: all 0.15s ease;
+}
+.pm-play-btn:hover {
+  border-color: var(--pm-gold);
+  color: var(--pm-gold);
+}
+.pm-play-btn.is-playing {
+  border-color: var(--pm-gold);
+  background-color: var(--pm-gold);
+  color: var(--pm-bg);
+}
+
+.pm-pixel-img { image-rendering: pixelated; }
+.pm-sprite-xs { width: 1.75rem; height: 1.75rem; }
+.pm-sprite-sm { width: 2rem; height: 2rem; }
+.pm-sprite-md { width: 3rem; height: 3rem; }
+
+.form-control.bg-transparent { color: var(--pm-text); }
+.form-control.bg-transparent::placeholder { color: var(--pm-muted); }
+.form-control:focus {
+  box-shadow: 0 0 0 0.2rem rgba(255, 215, 0, 0.15);
+  border-color: var(--pm-gold);
+}
