@@ -1,6 +1,5 @@
 ﻿using System.Diagnostics;
 
-
 public class AudioProcessor
 {
     private readonly string pythonPath = "python";
@@ -16,19 +15,19 @@ public class AudioProcessor
             UseShellExecute = false,
             CreateNoWindow = true
         };
-
+    
         using var process = Process.Start(psi);
-
+    
         string output = process.StandardOutput.ReadToEnd();
         string error = process.StandardError.ReadToEnd();
-
+    
         process.WaitForExit();
-
+    
         if (!string.IsNullOrEmpty(error))
         {
             throw new Exception($"Python Error: {error}");
         }
-
+    
         return output.Trim(); // output.wav path
     }
 }

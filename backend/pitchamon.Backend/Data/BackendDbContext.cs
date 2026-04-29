@@ -62,15 +62,6 @@ public class BackendDbContext : DbContext
                 .IsRequired()
                 .HasMaxLength(255);
 
-            entity.Property(p => p.CryFileUsed)
-                .HasColumnName("cry_file_used")
-                .IsRequired()
-                .HasMaxLength(255);
-
-            entity.Property(p => p.ProcessedSongFile)
-                .HasColumnName("processed_song_file")
-                .IsRequired();
-
             entity.Property(p => p.CreatedAt)
                 .HasColumnName("created_at")
                 .HasDefaultValueSql("CURRENT_TIMESTAMP")

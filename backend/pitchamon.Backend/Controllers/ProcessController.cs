@@ -12,6 +12,7 @@ public class ProcessController : ControllerBase
     private readonly TemporaryFileService temporaryFileService;
     private readonly PokemonApiClient pokemonApiClient;
     private readonly BackendDbContext dbContext;
+	AudioProcessor audioProcessor = new AudioProcessor();
 
     public ProcessController(
         TemporaryFileService tempfileService,
@@ -49,35 +50,30 @@ public class ProcessController : ControllerBase
 
         var cryBytes = await pokemonApiClient.GetCry(request.PokemonName);
         var cryPath = await temporaryFileService.SaveBytes(cryBytes, ".wav");
-        // var outputPath = await processingRunner.ProcessSong(savedPath, cryPath);
-        
-        //processing logic
+		
+        // returning output Byte
+		var outputPath = audioProcessor.ProcessAudio(savedPath, cryPath);
+		
+        // adding to processed song db
+         if (request.UserId.HasValue && outputPath != null)
+         {
+             var history = new ProcessingHistory
+             {
+                 UserId = request.UserId.Value,
+                 OriginalSongFile = request.Song.FileName,
+                 PokemonUsed = request.PokemonName,
+                 CreatedAt = DateTime.UtcNow
+             };
+             
+             dbContext.ProcessingHistory.Add(history);
+             await dbContext.SaveChangesAsync();
+        }
 
-        // if (request.UserId.HasValue)
-        // {
-        //     var history = new ProcessingHistory
-        //     {
-        //         UserId = request.UserId.Value,
-        //         OriginalSongFile = savedPath,
-        //         PokemonUsed = request.PokemonName,
-        //         CryFileUsed = cryPath,
-        //         //ProcessedSongFile = outputPath,
-        //         CreatedAt = DateTime.UtcNow
-        //     };
-        //     
-        //     dbContext.ProcessingHistory.Add(history);
-        //     await dbContext.SaveChangesAsync();
-        // }
-        
-        return Ok(new
+		if (outputPath == null)
         {
-            message = "Song upload successful",
-			pokemonName = request.PokemonName,
-            originalFileName = request.Song.FileName,
-			savedPath,
-            cryPath,
-			fileSize = request.Song.Length,
-            crySize = cryBytes.Length,
-        });
+            return StatusCode(500, new { error = "Audio processing failed" });
+        }
+
+		return PhysicalFile(outputPath, "audio/wav", "processed_file.wav");
     }
 }

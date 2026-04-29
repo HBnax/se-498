@@ -1,6 +1,10 @@
 ﻿import librosa
 import numpy as np
 import soundfile as sf
+import sys
+import io
+import os
+
 
 def process_audio(vocal_path, cry_path,
                   hop_length=512,
@@ -67,17 +71,15 @@ def process_audio(vocal_path, cry_path,
     # Save result to file
     output_path = "output.wav"
     sf.write(output_path, output, sr_s)
-
-    return output_path
-
+    absolute_path = os.path.abspath(output_path)
+    return absolute_path
 
 if __name__ == "__main__":
     import sys
-    print("Does this work")
     # Read input paths from command line
     vocal = sys.argv[1]
     cry = sys.argv[2]
 
     # Process and print output file path
-    out_path = process_audio(vocal, cry)
-    print(out_path)
+    output_path = process_audio(vocal, cry)
+    print(output_path)
