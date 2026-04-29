@@ -1,17 +1,28 @@
 import { useState } from 'react'
+import { api } from '../api/client'
 
-export default function AuthModal({ mode, onClose, onSwitchMode }) {
-  const [username, setUsername] = useState('')
+export default function AuthModal({ mode, onClose, onSwitchMode, onAuthSuccess }) {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
+  const [error, setError] = useState('')
+  const [loading, setLoading] = useState(false)
 
   const isSignup = mode === 'signup'
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault()
-    const payload = isSignup ? { username, email, password } : { username, password }
-    console.log(`${mode} submit`, payload)
-    onClose()
+    setError('')
+    setLoading(true)
+    try {
+      const endpoint = isSignup ? '/auth/register' : '/auth/login'
+      const { data } = await api.post(endpoint, { email, password })
+      if (onAuthSuccess) onAuthSuccess(data.user)
+      onClose()
+    } catch (err) {
+      setError(err.response?.data?.error || 'Something went wrong. Please try again.')
+    } finally {
+      setLoading(false)
+    }
   }
 
   return (
@@ -66,13 +77,13 @@ export default function AuthModal({ mode, onClose, onSwitchMode }) {
                     className="form-label text-uppercase small"
                     style={{ color: '#8B949E', letterSpacing: '0.2em', fontFamily: 'monospace' }}
                   >
-                    Username
+                    Email
                   </label>
                   <input
-                    type="text"
+                    type="email"
                     required
-                    value={username}
-                    onChange={(e) => setUsername(e.target.value)}
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
                     className="form-control"
                     style={{
                       backgroundColor: '#0D1117',
@@ -80,34 +91,9 @@ export default function AuthModal({ mode, onClose, onSwitchMode }) {
                       color: '#F0F6FC',
                       fontFamily: 'monospace',
                     }}
-                    placeholder="ashketchum"
+                    placeholder="ash@pallet.town"
                   />
                 </div>
-
-                {isSignup && (
-                  <div className="mb-3">
-                    <label
-                      className="form-label text-uppercase small"
-                      style={{ color: '#8B949E', letterSpacing: '0.2em', fontFamily: 'monospace' }}
-                    >
-                      Email
-                    </label>
-                    <input
-                      type="email"
-                      required
-                      value={email}
-                      onChange={(e) => setEmail(e.target.value)}
-                      className="form-control"
-                      style={{
-                        backgroundColor: '#0D1117',
-                        border: '1px solid #30363D',
-                        color: '#F0F6FC',
-                        fontFamily: 'monospace',
-                      }}
-                      placeholder="ash@pallet.town"
-                    />
-                  </div>
-                )}
 
                 <div className="mb-4">
                   <label
@@ -132,8 +118,24 @@ export default function AuthModal({ mode, onClose, onSwitchMode }) {
                   />
                 </div>
 
+                {error && (
+                  <div
+                    className="alert mb-3 small"
+                    role="alert"
+                    style={{
+                      backgroundColor: 'rgba(255, 60, 60, 0.1)',
+                      border: '1px solid rgba(255, 60, 60, 0.4)',
+                      color: '#FF3C3C',
+                      fontFamily: 'monospace',
+                    }}
+                  >
+                    {error}
+                  </div>
+                )}
+
                 <button
                   type="submit"
+                  disabled={loading}
                   className="btn w-100 text-uppercase py-2"
                   style={{
                     border: '2px solid #FFD700',
@@ -141,8 +143,10 @@ export default function AuthModal({ mode, onClose, onSwitchMode }) {
                     backgroundColor: 'transparent',
                     letterSpacing: '0.2em',
                     fontWeight: 600,
+                    opacity: loading ? 0.6 : 1,
                   }}
                   onMouseOver={(e) => {
+                    if (loading) return
                     e.currentTarget.style.backgroundColor = '#FFD700'
                     e.currentTarget.style.color = '#0D1117'
                   }}
@@ -151,7 +155,7 @@ export default function AuthModal({ mode, onClose, onSwitchMode }) {
                     e.currentTarget.style.color = '#FFD700'
                   }}
                 >
-                  {isSignup ? 'Create Account' : 'Log In'}
+                  {loading ? 'Loading…' : isSignup ? 'Create Account' : 'Log In'}
                 </button>
               </form>
 
@@ -164,7 +168,10 @@ export default function AuthModal({ mode, onClose, onSwitchMode }) {
                   type="button"
                   className="btn btn-link p-0 text-uppercase small align-baseline"
                   style={{ color: '#FF3C3C', letterSpacing: '0.2em', textDecoration: 'none' }}
-                  onClick={() => onSwitchMode(isSignup ? 'login' : 'signup')}
+                  onClick={() => {
+                    setError('')
+                    onSwitchMode(isSignup ? 'login' : 'signup')
+                  }}
                 >
                   {isSignup ? 'Log in' : 'Sign up'}
                 </button>
