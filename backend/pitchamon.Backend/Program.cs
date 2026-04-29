@@ -14,15 +14,16 @@ builder.Services.AddDbContext<BackendDbContext>(options =>
 
 builder.Services.AddSingleton<TemporaryFileService>();
 builder.Services.AddHttpClient<PokemonApiClient>();
-//builder.Services.AddCors(options =>
-//{
-//    options.AddPolicy("FrontendPolicy", policy =>
-//    {
-//        policy.AllowAnyOrigin()
-//              .AllowAnyHeader()
-//              .AllowAnyMethod();
-//    });
-//});
+
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("FrontendPolicy", policy =>
+    {
+        policy.WithOrigins("http://localhost:5173")
+              .AllowAnyHeader()
+              .AllowAnyMethod();
+    });
+});
 
 var app = builder.Build();
 
@@ -31,9 +32,12 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+else
+{
+    app.UseHttpsRedirection();
+}
 
-app.UseHttpsRedirection();
-//app.UseCors("FrontendPolicy");
+app.UseCors("FrontendPolicy");
 app.MapControllers();
 
 app.Run();
