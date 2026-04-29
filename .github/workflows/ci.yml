@@ -6,8 +6,8 @@ on:
   workflow_dispatch:
 
 jobs:
-  build-api:
-    name: Build API
+  build-and-test-dotnet:
+    name: Build and Test .NET Projects
     runs-on: ubuntu-latest
 
     steps:
@@ -18,15 +18,18 @@ jobs:
         uses: actions/setup-dotnet@v5
         with:
           dotnet-version: '8.0.x'
+          
+      - name: Restore solution
+        run: dotnet restore pitchamon.sln
+      
+      - name: Build solution
+        run: dotnet build pitchamon.sln --no-restore --configuration Release
 
-      - name: Confirm Workflow is Running
-        run: echo "Workflow is running successfully!"
-
-      - name: Restore API dependencies
-        run: dotnet restore api/pitchamon.Api/pitchamon.Api.csproj
-
-      - name: Build API
-        run: dotnet build api/pitchamon.Api/pitchamon.Api.csproj --no-restore --configuration Release
+      - name: Run API Tests
+        run: dotnet test api/pitchamon.Api.Tests/pitchamon.Api.Tests.csproj --no-build --configuration Release
+        
+      - name: Run Backend Tests
+        run: dotnet test backend/pitchamon.Backend.Tests/pitchamon.Backend.Tests.csproj --no-build --configuration Release
 
   validate-api-db:
     name: Validate API Database
