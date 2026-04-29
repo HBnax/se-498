@@ -18,3 +18,5 @@
 bin/
 obj/
 .env
+.claude/tsc-cache/e28694ba-252d-4a0d-ac16-2a2095a69a3c/affected-repos.txt
+.claude/tsc-cache/e28694ba-252d-4a0d-ac16-2a2095a69a3c/edited-files.log

@@ -37,7 +37,7 @@ function cryUrl(name) {
   return `https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/${id}.ogg`
 }
 
-export default function HomePage() {
+export default function HomePage({ user, setUser }) {
   const navigate = useNavigate()
   const fileInputRef = useRef(null)
   const audioRef = useRef(null)
@@ -93,21 +93,41 @@ export default function HomePage() {
 
   return (
     <div className="min-vh-100 pm-bg position-relative px-3 py-5 d-flex flex-column align-items-center">
-      <div className="position-absolute top-0 end-0 d-flex gap-2 p-4">
-        <button
-          type="button"
-          className="btn btn-sm pm-btn-gold"
-          onClick={() => setAuthMode('login')}
-        >
-          Log In
-        </button>
-        <button
-          type="button"
-          className="btn btn-sm pm-btn-gold"
-          onClick={() => setAuthMode('signup')}
-        >
-          Sign Up
-        </button>
+      <div className="position-absolute top-0 end-0 d-flex align-items-center gap-2 p-4">
+        {user ? (
+          <>
+            <span
+              className="font-mono small pm-tracking-wide text-uppercase"
+              style={{ color: 'var(--pm-gold)' }}
+            >
+              {user.email}
+            </span>
+            <button
+              type="button"
+              className="btn btn-sm pm-btn-outline"
+              onClick={() => setUser(null)}
+            >
+              Log Out
+            </button>
+          </>
+        ) : (
+          <>
+            <button
+              type="button"
+              className="btn btn-sm pm-btn-gold"
+              onClick={() => setAuthMode('login')}
+            >
+              Log In
+            </button>
+            <button
+              type="button"
+              className="btn btn-sm pm-btn-gold"
+              onClick={() => setAuthMode('signup')}
+            >
+              Sign Up
+            </button>
+          </>
+        )}
       </div>
 
       <div className="text-center mb-5">
@@ -266,6 +286,7 @@ export default function HomePage() {
           mode={authMode}
           onClose={() => setAuthMode(null)}
           onSwitchMode={setAuthMode}
+          onAuthSuccess={(authedUser) => setUser(authedUser)}
         />
       )}
     </div>
