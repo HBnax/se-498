@@ -1,16 +1,15 @@
 on:
   pull_request:
-    branches:
-      - main
   push:
     branches:
       - main
-  workflow_dispatch: 
+  workflow_dispatch:
 
 jobs:
-  build-and-test:
+  build-api:
+    name: Build API
     runs-on: ubuntu-latest
-    
+
     steps:
       - name: Check Out Repository
         uses: actions/checkout@v6
@@ -19,15 +18,121 @@ jobs:
         uses: actions/setup-dotnet@v5
         with:
           dotnet-version: '8.0.x'
-          
+
       - name: Confirm Workflow is Running
         run: echo "Workflow is running successfully!"
 
-#      - name: Restore dependencies
-#        run: dotnet restore
-#
-#      - name: Build
-#        run: dotnet build --no-restore --configuration Release
-#
-#      - name: Run Tests
-#        run: dotnet test --no-build --configuration Release
+      - name: Restore API dependencies
+        run: dotnet restore api/pitchamon.Api/pitchamon.Api.csproj
+
+      - name: Build API
+        run: dotnet build api/pitchamon.Api/pitchamon.Api.csproj --no-restore --configuration Release
+
+  validate-api-db:
+    name: Validate API Database
+    runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_DB: pokemon_cries
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: password
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U postgres"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 10
+
+    steps:
+      - name: Check Out Repository
+        uses: actions/checkout@v6
+
+      - name: Set Up .NET
+        uses: actions/setup-dotnet@v5
+        with:
+          dotnet-version: '8.0.x'
+
+      - name: Restore API dependencies
+        run: dotnet restore api/pitchamon.Api/pitchamon.Api.csproj
+
+      - name: Build API
+        run: dotnet build api/pitchamon.Api/pitchamon.Api.csproj --no-restore --configuration Release
+
+      - name: Start API
+        env:
+          ASPNETCORE_ENVIRONMENT: Development
+          ASPNETCORE_URLS: http://0.0.0.0:8080
+          ConnectionStrings__DefaultConnection: Host=localhost;Port=5432;Database=pokemon_cries;Username=postgres;Password=password
+          Auth__BearerToken: ci-test-token
+        run: |
+          dotnet run --project api/pitchamon.Api/pitchamon.Api.csproj > api.log 2>&1 &
+          sleep 20
+
+      - name: Verify API endpoint works
+        run: 'curl --fail -H "Authorization: Bearer ci-test-token" http://localhost:8080/pokemon'
+
+      - name: Verify cry endpoint works
+        run: 'curl --fail -H "Authorization: Bearer ci-test-token" http://localhost:8080/pokemon/pikachu/cry --output 025.wav'
+
+      - name: Show API log on failure
+        if: failure()
+        run: cat api.log
+
+  validate-backend-db-schema:
+    name: Validate Backend DB Schema
+    runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_DB: pitchamon
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: password
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U postgres"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 10
+
+    steps:
+      - name: Check Out Repository
+        uses: actions/checkout@v6
+
+      - name: Install PostgreSQL client
+        run: sudo apt-get update && sudo apt-get install -y postgresql-client
+
+      - name: Apply backend schema
+        env:
+          PGPASSWORD: password
+        run: psql -h localhost -U postgres -d pitchamon -f backend-db/init.sql
+
+      - name: Verify users table exists
+        env:
+          PGPASSWORD: password
+        run: psql -h localhost -U postgres -d pitchamon -c "\dt users"
+
+      - name: Verify processing_history table exists
+        env:
+          PGPASSWORD: password
+        run: psql -h localhost -U postgres -d pitchamon -c "\dt processing_history"
+
+  build-containers:
+    name: Validate Containers
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check Out Repository
+        uses: actions/checkout@v6
+
+      - name: Validate compose file
+        run: docker compose -f compose.yaml config
+
+      - name: Build API container
+        run: docker build -f api/pitchamon.Api/Dockerfile -t pitchamon-api-ci .
