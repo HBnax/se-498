@@ -128,7 +128,7 @@ jobs:
 
   build-frontend:
     name: Build Frontend
-    runs-on: unbuntu-latest
+    runs-on: ubuntu-latest
     
     defaults:
       run:
