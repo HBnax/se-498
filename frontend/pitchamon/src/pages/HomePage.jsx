@@ -1,6 +1,7 @@
 import { useState, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
 import AuthModal from '../components/AuthModal'
+import { processSong } from '../api/client'
 
 const POKEMON = [
   'Bulbasaur','Ivysaur','Venusaur','Charmander','Charmeleon','Charizard',
@@ -48,6 +49,8 @@ export default function HomePage({ user, setUser }) {
   const [dragOver, setDragOver] = useState(false)
   const [playingPokemon, setPlayingPokemon] = useState('')
   const [authMode, setAuthMode] = useState(null)
+  const [processing, setProcessing] = useState(false)
+  const [processError, setProcessError] = useState('')
 
   const filtered = POKEMON.filter(p =>
     p.toLowerCase().includes(search.toLowerCase())
@@ -83,13 +86,27 @@ export default function HomePage({ user, setUser }) {
     audio.onended = () => setPlayingPokemon('')
   }
 
-  const handleTranspose = () => {
-    navigate('/results', {
-      state: { fileName: mp3File.name, pokemon: selectedPokemon }
-    })
+  const handleTranspose = async () => {
+    setProcessError('')
+    setProcessing(true)
+    try {
+      const blob = await processSong(mp3File, selectedPokemon, user?.id)
+      const audioUrl = URL.createObjectURL(blob)
+      navigate('/results', {
+        state: { fileName: mp3File.name, pokemon: selectedPokemon, audioUrl }
+      })
+    } catch (err) {
+      const message =
+        err.response?.data?.error ||
+        (err.response?.status ? `Processing failed (${err.response.status})` : err.message) ||
+        'Processing failed'
+      setProcessError(message)
+    } finally {
+      setProcessing(false)
+    }
   }
 
-  const canTranspose = mp3File && selectedPokemon
+  const canTranspose = mp3File && selectedPokemon && !processing
 
   return (
     <div className="min-vh-100 pm-bg position-relative px-3 py-5 d-flex flex-column align-items-center">
@@ -266,10 +283,16 @@ export default function HomePage({ user, setUser }) {
             disabled={!canTranspose}
             className="btn btn-lg pm-btn-gold px-5 py-3"
           >
-            TRANSPOSE
+            {processing ? 'PROCESSING…' : 'TRANSPOSE'}
           </button>
 
-          {!canTranspose && (
+          {processError && (
+            <p className="font-mono small mt-3 mb-0" style={{ color: 'var(--pm-red)' }}>
+              {processError}
+            </p>
+          )}
+
+          {!processing && !processError && (!mp3File || !selectedPokemon) && (
             <p className="font-mono pm-muted small mt-3 mb-0">
               {!mp3File && !selectedPokemon
                 ? 'Upload an MP3 and select a Pokémon to begin'
