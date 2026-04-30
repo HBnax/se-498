@@ -62,9 +62,11 @@ public class ProcessController : ControllerBase
                  UserId = request.UserId.Value,
                  OriginalSongFile = request.Song.FileName,
                  PokemonUsed = request.PokemonName,
+                 CryFileUsed = Path.GetFileName(cryPath),
+                 ProcessedSongFile = Path.GetFileName(outputPath),
                  CreatedAt = DateTime.UtcNow
              };
-             
+
              dbContext.ProcessingHistory.Add(history);
              await dbContext.SaveChangesAsync();
         }
