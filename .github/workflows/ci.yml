@@ -169,4 +169,4 @@ jobs:
         run: docker build -f backend/pitchamon.Backend/Dockerfile -t pitchamon-backend-ci .
         
       - name: Build Frontend container
-        run: docker build -f frontend/pitchamon/Dockerfile -t pitchamon-frontend-ci .
+        run: docker build -f frontend/pitchamon/Dockerfile -t pitchamon-frontend-ci frontend/pitchamon
