@@ -15,6 +15,10 @@
   - Backend API: `http://localhost:8081/swagger`
   - Frontend: `http://localhost:5173`
 
+#### Bearer Token for Pokemon API
+- In Root folder, add an `.env` file with:
+  - AUTH_BEARER_TOKEN=`<token>` (can be anything you want)
+
 ### Contributors:
 - Jeffrey Bok
 - Halle Broadnax 

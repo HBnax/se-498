@@ -1,4 +1,4 @@
-# Pitch-A-Mon API Spec
+# 151 Pokémon API Spec
 
 ## Overview
 This API provides Pokémon cry data for the original 151 Pokémon
@@ -10,11 +10,17 @@ This API provides Pokémon cry data for the original 151 Pokémon
 ## Base URL
 https://localhost:8080
 
+## Authentication
+All endpoints require a valid Bearer token.
+
+### Setup
+Create an `.env` file in the root directory:
+- `AUTH_BEARER_TOKEN=<your_token_here>` (can be any string you want)
+
+
 ## Endpoints
-### GET All Pokémon
-`GET /pokemon`: returns cry data for all supported Pokémon
-#### **Parameters:**
-None
+### `GET /pokemon`
+Returns cry data for all supported Pokémon
 #### **Responses:**
 -  `200 OK`
 ```
@@ -45,11 +51,11 @@ None
   "error": "Invalid or missing token"
 }
 ```
-### GET Individual Pokémon 
-`GET /pokemon/{name}`: returns cry data for a specific Pokémon
+### `GET /pokemon/{name}`
+Returns cry data for a specific Pokémon
 #### **Parameters:**
     - name (string, required)
-    Example: `GET /pokemon/pikachu`
+Example: `GET /pokemon/pikachu`
 #### **Responses:**
 -  `200 OK`
 ```
@@ -58,6 +64,34 @@ None
   "name": "Pikachu",
   "cry": "025.wav"
 }
+```
+- `404 Not Found`
+```
+{
+  "error": "Pokémon not found"
+}
+```
+- `401 Unauthorized`
+```
+{
+  "error": "Invalid or missing token"
+}
+```
+### `GET /pokemon/{name}/cry`
+Returns the actual Pokémon cry audio file
+#### **Parameters:**
+    - name (string, required)
+Example: `GET /pokemon/pikachu/cry`
+#### **Responses:**
+- `200 OK`
+- Content-Type: `audio/wav`
+- Returns downloadable audio file
+
+Response headers:
+```
+ content-disposition: attachment; filename=025.wav; filename*=UTF-8''025.wav 
+ content-length: 78542 
+ content-type: audio/wav 
 ```
 - `404 Not Found`
 ```
@@ -111,3 +145,8 @@ None
 }
 ```
 
+### Integration Notes
+- Pokémon Names are case-insensitive
+- Cry files are returned as .wav
+
+##
