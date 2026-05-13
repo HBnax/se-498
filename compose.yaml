@@ -39,6 +39,8 @@ services:
         - ConnectionStrings__DefaultConnection=Host=backend-db;Port=5432;Database=pitchamon;Username=postgres;Password=password
         - PokemonApi__BaseUrl=http://pitchamon.api:8080
         - PokemonApi__BearerToken=${AUTH_BEARER_TOKEN}
+        - LotrApi__BaseUrl=http://host.containers.internal:8090
+        - LotrApi__BearerToken=
         - ASPNETCORE_ENVIRONMENT=Development
         - ASPNETCORE_URLS=http://0.0.0.0:8081
     depends_on:
