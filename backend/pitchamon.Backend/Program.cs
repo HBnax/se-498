@@ -14,6 +14,7 @@ builder.Services.AddDbContext<BackendDbContext>(options =>
 
 builder.Services.AddSingleton<TemporaryFileService>();
 builder.Services.AddHttpClient<PokemonApiClient>();
+builder.Services.AddHttpClient<LotrApiClient>();
 
 builder.Services.AddCors(options =>
 {
@@ -21,7 +22,8 @@ builder.Services.AddCors(options =>
     {
         policy.WithOrigins("http://localhost:5173")
               .AllowAnyHeader()
-              .AllowAnyMethod();
+              .AllowAnyMethod()
+              .WithExposedHeaders("X-Lotr-Class-Id", "X-Lotr-Class-Name", "X-Lotr-Class-Description", "X-Pokemon-Id");
     });
 });
 
