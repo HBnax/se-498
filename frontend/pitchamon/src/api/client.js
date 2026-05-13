@@ -17,3 +17,10 @@ export async function processSong(file, pokemonName, userId) {
   })
   return response.data
 }
+
+export async function getProcessingHistory(userId) {
+  const response = await api.get('/process/history', {
+    params: { UserId: userId },
+  })
+  return response.data?.history ?? []
+}

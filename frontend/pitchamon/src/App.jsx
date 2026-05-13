@@ -2,6 +2,7 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import { useEffect, useState } from 'react'
 import HomePage from './pages/HomePage'
 import ResultsPage from './pages/ResultsPage'
+import HistoryPage from './pages/HistoryPage'
 
 const STORAGE_KEY = 'pitchamon.user'
 
@@ -29,7 +30,8 @@ export default function App() {
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<HomePage user={user} setUser={setUser} />} />
-        <Route path="/results" element={<ResultsPage />} />
+        <Route path="/results" element={<ResultsPage user={user} setUser={setUser} />} />
+        <Route path="/history" element={<HistoryPage user={user} />} />
       </Routes>
     </BrowserRouter>
   )
