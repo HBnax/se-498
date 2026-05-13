@@ -1,5 +1,6 @@
 import { useLocation, useNavigate } from 'react-router-dom'
 import { useEffect, useState } from 'react'
+import AuthModal from '../components/AuthModal'
 
 const POKEMON = [
   'Bulbasaur','Ivysaur','Venusaur','Charmander','Charmeleon','Charizard',
@@ -26,11 +27,12 @@ const POKEMON = [
   'Snorlax','Articuno','Zapdos','Moltres','Dratini','Dragonair','Dragonite','Mewtwo','Mew'
 ]
 
-export default function ResultsPage() {
+export default function ResultsPage({ user, setUser }) {
   const location = useLocation()
   const navigate = useNavigate()
   const { fileName, pokemon, audioUrl } = location.state || {}
   const [bounce, setBounce] = useState(false)
+  const [authMode, setAuthMode] = useState(null)
 
   const pokemonIndex = POKEMON.indexOf(pokemon) + 1
   const spriteUrl = `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${pokemonIndex}.png`
@@ -49,7 +51,51 @@ export default function ResultsPage() {
   }
 
   return (
-    <div className="min-vh-100 pm-bg d-flex flex-column align-items-center justify-content-center px-3 py-5">
+    <div className="min-vh-100 pm-bg position-relative d-flex flex-column align-items-center justify-content-center px-3 py-5">
+      <div className="position-absolute top-0 end-0 d-flex align-items-center gap-2 p-4">
+        {user ? (
+          <>
+            <span
+              className="font-mono small pm-tracking-wide text-uppercase"
+              style={{ color: 'var(--pm-gold)' }}
+            >
+              {user.email}
+            </span>
+            <button
+              type="button"
+              className="btn btn-sm pm-btn-outline"
+              onClick={() => navigate('/history')}
+            >
+              History
+            </button>
+            <button
+              type="button"
+              className="btn btn-sm pm-btn-outline"
+              onClick={() => setUser(null)}
+            >
+              Log Out
+            </button>
+          </>
+        ) : (
+          <>
+            <button
+              type="button"
+              className="btn btn-sm pm-btn-gold"
+              onClick={() => setAuthMode('login')}
+            >
+              Log In
+            </button>
+            <button
+              type="button"
+              className="btn btn-sm pm-btn-gold"
+              onClick={() => setAuthMode('signup')}
+            >
+              Sign Up
+            </button>
+          </>
+        )}
+      </div>
+
       <h1 className="font-display pm-gold text-center mb-5" style={{ fontSize: 'clamp(1.25rem, 3vw, 1.875rem)' }}>
         PITCHAMON COMPLETE!
       </h1>
@@ -104,6 +150,15 @@ export default function ResultsPage() {
           </div>
         </div>
       </div>
+
+      {authMode && (
+        <AuthModal
+          mode={authMode}
+          onClose={() => setAuthMode(null)}
+          onSwitchMode={setAuthMode}
+          onAuthSuccess={(authedUser) => setUser(authedUser)}
+        />
+      )}
     </div>
   )
 }

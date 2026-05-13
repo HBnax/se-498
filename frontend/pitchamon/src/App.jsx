@@ -30,7 +30,7 @@ export default function App() {
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<HomePage user={user} setUser={setUser} />} />
-        <Route path="/results" element={<ResultsPage />} />
+        <Route path="/results" element={<ResultsPage user={user} setUser={setUser} />} />
         <Route path="/history" element={<HistoryPage user={user} />} />
       </Routes>
     </BrowserRouter>

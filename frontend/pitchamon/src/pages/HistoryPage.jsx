@@ -37,7 +37,13 @@ function formatDate(value) {
   if (!value) return ''
   const d = new Date(value)
   if (Number.isNaN(d.getTime())) return value
-  return d.toLocaleString()
+  return d.toLocaleString([], {
+    year: 'numeric',
+    month: 'numeric',
+    day: 'numeric',
+    hour: 'numeric',
+    minute: '2-digit',
+  })
 }
 
 export default function HistoryPage({ user }) {
@@ -126,7 +132,7 @@ export default function HistoryPage({ user }) {
               return (
                 <div key={entry.id} className="pm-card p-3">
                   <div className="row g-3 align-items-center">
-                    <div className="col-12 col-md-3 d-flex align-items-center gap-3">
+                    <div className="col-12 col-md-4 d-flex align-items-center gap-3">
                       {sprite && (
                         <img
                           src={sprite}
@@ -143,7 +149,7 @@ export default function HistoryPage({ user }) {
                       </div>
                     </div>
 
-                    <div className="col-12 col-md-4">
+                    <div className="col-12 col-md-5">
                       <span className="font-mono pm-muted pm-tracking-wide text-uppercase d-block mb-1" style={{ fontSize: '0.65rem' }}>
                         Original Song
                       </span>
@@ -152,16 +158,7 @@ export default function HistoryPage({ user }) {
                       </span>
                     </div>
 
-                    <div className="col-12 col-md-4">
-                      <span className="font-mono pm-muted pm-tracking-wide text-uppercase d-block mb-1" style={{ fontSize: '0.65rem' }}>
-                        Transposed Song
-                      </span>
-                      <span className="font-mono pm-text small text-break">
-                        {entry.processedSongFile}
-                      </span>
-                    </div>
-
-                    <div className="col-12 col-md-1 text-md-end">
+                    <div className="col-12 col-md-3 text-md-end">
                       <span className="font-mono pm-muted" style={{ fontSize: '0.7rem' }}>
                         {formatDate(entry.createdAt)}
                       </span>
