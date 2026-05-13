@@ -122,6 +122,13 @@ export default function HomePage({ user, setUser }) {
             <button
               type="button"
               className="btn btn-sm pm-btn-outline"
+              onClick={() => navigate('/history')}
+            >
+              History
+            </button>
+            <button
+              type="button"
+              className="btn btn-sm pm-btn-outline"
               onClick={() => setUser(null)}
             >
               Log Out
