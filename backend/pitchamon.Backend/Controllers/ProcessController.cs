@@ -11,16 +11,19 @@ public class ProcessController : ControllerBase
 {
     private readonly TemporaryFileService temporaryFileService;
     private readonly PokemonApiClient pokemonApiClient;
+    private readonly LotrApiClient lotrApiClient;
     private readonly BackendDbContext dbContext;
 	AudioProcessor audioProcessor = new AudioProcessor();
 
     public ProcessController(
         TemporaryFileService tempfileService,
         PokemonApiClient apiClient,
+        LotrApiClient lotrClient,
         BackendDbContext context)
     {
         temporaryFileService = tempfileService;
         pokemonApiClient = apiClient;
+        lotrApiClient = lotrClient;
         dbContext = context;
     }
     
@@ -47,6 +50,9 @@ public class ProcessController : ControllerBase
         }
        
         var savedPath = await temporaryFileService.SaveUploadedFile(request.Song);
+        
+        var pokemon = await pokemonApiClient.GetPokemonDetails(request.PokemonName);
+        var selectedLotrClass = await lotrApiClient.SelectClass(request.Song.Length, pokemon.Id);
 
         var cryBytes = await pokemonApiClient.GetCry(request.PokemonName);
         var cryPath = await temporaryFileService.SaveBytes(cryBytes, ".wav");
@@ -76,6 +82,12 @@ public class ProcessController : ControllerBase
             return StatusCode(500, new { error = "Audio processing failed" });
         }
 
+        Response.Headers["Song-Length"] = request.Song.Length.ToString();
+        Response.Headers["Lotr-Class-Id"] = selectedLotrClass.Id.ToString();
+        Response.Headers["Lotr-Class-Name"] = selectedLotrClass.Name;
+        Response.Headers["Lotr-Class-Description"] = selectedLotrClass.Desc;
+        Response.Headers["Pokemon-Id"] = pokemon.Id.ToString();
+        
 		return PhysicalFile(outputPath, "audio/wav", "processed_file.wav");
     }
 }
