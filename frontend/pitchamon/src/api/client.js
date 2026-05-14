@@ -15,7 +15,15 @@ export async function processSong(file, pokemonName, userId) {
     headers: { 'Content-Type': undefined },
     responseType: 'blob',
   })
-  return response.data
+  return {
+    audioBlob: response.data,
+    lotrClass: {
+      id: response.headers["lotr-class-id"],
+      name: response.headers["lotr-class-name"],
+      desc: response.headers["lotr-class-description"],
+    },
+    pokemonId: response.headers["pokemon-id"],
+  }
 }
 
 export async function getProcessingHistory(userId) {

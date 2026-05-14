@@ -23,7 +23,11 @@ builder.Services.AddCors(options =>
         policy.WithOrigins("http://localhost:5173")
               .AllowAnyHeader()
               .AllowAnyMethod()
-              .WithExposedHeaders("X-Lotr-Class-Id", "X-Lotr-Class-Name", "X-Lotr-Class-Description", "X-Pokemon-Id");
+              .WithExposedHeaders(
+                  "Lotr-Class-Id", 
+                  "Lotr-Class-Name", 
+                  "Lotr-Class-Description", 
+                  "Pokemon-Id");
     });
 });
 
