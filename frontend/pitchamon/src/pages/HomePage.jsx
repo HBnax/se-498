@@ -90,10 +90,16 @@ export default function HomePage({ user, setUser }) {
     setProcessError('')
     setProcessing(true)
     try {
-      const blob = await processSong(mp3File, selectedPokemon, user?.id)
-      const audioUrl = URL.createObjectURL(blob)
+      const result = await processSong(mp3File, selectedPokemon, user?.id)
+      const audioUrl = URL.createObjectURL(result.audioBlob)
       navigate('/results', {
-        state: { fileName: mp3File.name, pokemon: selectedPokemon, audioUrl }
+        state: { 
+          fileName: mp3File.name, 
+          pokemon: selectedPokemon, 
+          audioUrl ,
+          lotrClass: result.lotrClass,
+          pokemonId: result.pokemonId,
+        }
       })
     } catch (err) {
       const message =
@@ -205,7 +211,7 @@ export default function HomePage({ user, setUser }) {
                 className={`btn w-100 d-flex align-items-center justify-content-between pm-btn-outline ${selectedPokemon ? '' : 'pm-muted'}`}
                 style={{
                   height: '3rem',
-                  borderColor: selectedPokemon ? 'var(--pm-red)' : 'var(--pm-border)',
+                  borderColor: selectedPokemon ? 'var(--pm-gold)' : 'var(--pm-border)',
                   backgroundColor: 'var(--pm-surface)',
                   color: selectedPokemon ? 'var(--pm-text)' : 'var(--pm-muted)',
                   fontFamily: 'var(--font-mono)',
@@ -266,7 +272,7 @@ export default function HomePage({ user, setUser }) {
             {selectedPokemon && (
               <div
                 className="pm-card d-flex align-items-center gap-3 px-3 py-2 mt-2"
-                style={{ borderColor: 'rgba(255, 60, 60, 0.3)' }}
+                style={{ borderColor: 'var(--pm-gold)' }}
               >
                 <img src={spriteUrl(selectedPokemon)} alt={selectedPokemon} className="pm-pixel-img pm-sprite-md" />
                 <span className="font-mono pm-text small flex-grow-1">{selectedPokemon}</span>
@@ -274,7 +280,7 @@ export default function HomePage({ user, setUser }) {
                   type="button"
                   onClick={(e) => handlePlay(e, selectedPokemon)}
                   className={`pm-play-btn ${playingPokemon === selectedPokemon ? 'is-playing' : ''}`}
-                  style={{ borderColor: playingPokemon === selectedPokemon ? 'var(--pm-gold)' : 'var(--pm-red)', color: playingPokemon === selectedPokemon ? 'var(--pm-bg)' : 'var(--pm-red)' }}
+                  style={{ borderColor: playingPokemon === selectedPokemon ? 'var(--pm-gold)' : 'var(--pm-gold)', color: playingPokemon === selectedPokemon ? 'var(--pm-gold)' : 'var(--pm-gold)' }}
                 >
                   {playingPokemon === selectedPokemon ? '■' : '▶'}
                 </button>

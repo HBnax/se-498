@@ -30,7 +30,7 @@ const POKEMON = [
 export default function ResultsPage({ user, setUser }) {
   const location = useLocation()
   const navigate = useNavigate()
-  const { fileName, pokemon, audioUrl } = location.state || {}
+  const { fileName, pokemon, audioUrl , lotrClass, pokemonId} = location.state || {}
   const [bounce, setBounce] = useState(false)
   const [authMode, setAuthMode] = useState(null)
 
@@ -147,6 +147,28 @@ export default function ResultsPage({ user, setUser }) {
             <span className="font-mono pm-muted pm-tracking-wide" style={{ fontSize: '0.75rem' }}>
               {pokemon?.toUpperCase()}
             </span>
+
+            {lotrClass?.name && (
+                <div className="pm-card p-3">
+                    <span
+                        className="font-mono pm-muted pm-tracking-wide text-uppercase d-block mb-2"
+                        style={{ fontSize: '0.65rem' }}
+                    >
+                      Your Song's LOTR Class
+                    </span>
+
+                  <p className="font-mono pm-gold small mb-1">
+                    {lotrClass.name}
+                  </p>
+
+                  {lotrClass.desc && (
+                      <p className="font-mono pm-muted mb-0" style={{ fontSize: '0.8rem' }}>
+                        {lotrClass.desc}
+                      </p>
+                  )}
+                </div>
+            )}
+            
           </div>
         </div>
       </div>
