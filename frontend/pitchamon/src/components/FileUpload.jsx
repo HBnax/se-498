@@ -12,12 +12,17 @@ function FileUpload({ file, onFileChange, disabled }) {
       onFileChange(null)
       return
     }
-    const isMp3 =
+    const name = selected.name.toLowerCase()
+    const isAccepted =
       selected.type === 'audio/mpeg' ||
-      selected.name.toLowerCase().endsWith('.mp3')
-    if (!isMp3) {
+      selected.type === 'audio/midi' ||
+      selected.type === 'audio/x-midi' ||
+      name.endsWith('.mp3') ||
+      name.endsWith('.mid') ||
+      name.endsWith('.midi')
+    if (!isAccepted) {
       onFileChange(null)
-      setFileError('Please select a valid MP3 file.')
+      setFileError('Please select a valid MP3 or MIDI file.')
       return
     }
     if (selected.size > MAX_FILE_BYTES) {
@@ -31,12 +36,12 @@ function FileUpload({ file, onFileChange, disabled }) {
   return (
     <div className="file-upload">
       <label htmlFor="song" className="file-label">
-        {file ? 'Change MP3' : 'Choose MP3 file'}
+        {file ? 'Change file' : 'Choose MP3 or MIDI file'}
       </label>
       <input
         id="song"
         type="file"
-        accept="audio/mpeg,.mp3"
+        accept="audio/mpeg,.mp3,audio/midi,audio/x-midi,.mid,.midi"
         onChange={handleChange}
         disabled={disabled}
         className="file-input"

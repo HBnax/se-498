@@ -57,10 +57,19 @@ export default function HomePage({ user, setUser }) {
   )
 
   const handleFile = (file) => {
-    if (file && file.type === 'audio/mpeg') {
+    if (!file) return
+    const name = file.name.toLowerCase()
+    const isAccepted =
+      file.type === 'audio/mpeg' ||
+      file.type === 'audio/midi' ||
+      file.type === 'audio/x-midi' ||
+      name.endsWith('.mp3') ||
+      name.endsWith('.mid') ||
+      name.endsWith('.midi')
+    if (isAccepted) {
       setMp3File(file)
     } else {
-      alert('Please upload an MP3 file.')
+      alert('Please upload an MP3 or MIDI file.')
     }
   }
 
@@ -169,7 +178,7 @@ export default function HomePage({ user, setUser }) {
         <div className="row g-4 mb-4">
           <div className="col-12 col-md-6">
             <label className="form-label font-mono pm-muted small pm-tracking-wide text-uppercase">
-              Add MP3
+              Add Song
             </label>
             <div
               onClick={() => fileInputRef.current.click()}
@@ -182,19 +191,19 @@ export default function HomePage({ user, setUser }) {
                 <>
                   <span className="mb-2" style={{ fontSize: '1.75rem' }}>🎵</span>
                   <span className="font-mono pm-gold small text-break text-center px-3">{mp3File.name}</span>
-                  <span className="font-mono pm-muted mt-1" style={{ fontSize: '0.75rem' }}>Click to change</span>
+                  <span className="font-mono pm-muted mt-1" style={{ fontSize: '0.75rem' }}>Click to change file</span>
                 </>
               ) : (
                 <>
                   <span className="mb-3" style={{ fontSize: '2rem', color: 'var(--pm-border)' }}>+</span>
-                  <span className="font-mono pm-muted small">Click or drag an MP3 here</span>
+                  <span className="font-mono pm-muted small">Click or drag an MP3 or MIDI here</span>
                 </>
               )}
             </div>
             <input
               ref={fileInputRef}
               type="file"
-              accept=".mp3,audio/mpeg"
+              accept=".mp3,audio/mpeg,.mid,.midi,audio/midi,audio/x-midi"
               className="d-none"
               onChange={(e) => handleFile(e.target.files[0])}
             />
@@ -308,9 +317,9 @@ export default function HomePage({ user, setUser }) {
           {!processing && !processError && (!mp3File || !selectedPokemon) && (
             <p className="font-mono pm-muted small mt-3 mb-0">
               {!mp3File && !selectedPokemon
-                ? 'Upload an MP3 and select a Pokémon to begin'
+                ? 'Upload an MP3 or MIDI and select a Pokémon to begin'
                 : !mp3File
-                  ? 'Upload an MP3 to continue'
+                  ? 'Upload an MP3 or MIDI to continue'
                   : 'Select a Pokémon to continue'}
             </p>
           )}

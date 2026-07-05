@@ -41,7 +41,7 @@ public class ProcessController : ControllerBase
             return BadRequest(new { error = "Pokemon name is required" });
         }
         
-        var allowedExtensions = new[] { ".mp3", ".wav" };
+        var allowedExtensions = new[] { ".mp3", ".wav", ".mid", ".midi" };
         var extension = Path.GetExtension(request.Song.FileName).ToLowerInvariant();
     
         if (!allowedExtensions.Contains(extension))
