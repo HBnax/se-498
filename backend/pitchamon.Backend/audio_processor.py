@@ -1,9 +1,23 @@
-﻿import librosa
+import librosa
 import numpy as np
 import soundfile as sf
 import sys
-import io
 import os
+
+
+def midi_to_pitch_contour(midi_path, n_frames, hop_length, sr):
+    import pretty_midi
+    pm = pretty_midi.PrettyMIDI(midi_path)
+    f0 = np.zeros(n_frames)
+    for instrument in pm.instruments:
+        if instrument.is_drum:
+            continue
+        for note in instrument.notes:
+            start_frame = int(note.start * sr / hop_length)
+            end_frame   = int(note.end   * sr / hop_length)
+            freq = 440.0 * (2.0 ** ((note.pitch - 69) / 12.0))
+            f0[start_frame : min(end_frame, n_frames)] = freq
+    return f0
 
 
 def process_audio(vocal_path, cry_path,
@@ -11,27 +25,40 @@ def process_audio(vocal_path, cry_path,
                   win_length=2048,
                   rms_ratio=0.5):
 
-    # Load input audio files
-    y, sr = librosa.load(vocal_path)
+    is_midi = vocal_path.lower().endswith(('.mid', '.midi'))
+
+    # Load Pokemon cry
     sample, sr_s = librosa.load(cry_path)
 
-    # Compute RMS for loudness-based gating
-    rms = librosa.feature.rms(y=y, hop_length=hop_length)[0]
-    threshold = np.mean(rms) * rms_ratio
+    if is_midi:
+        import pretty_midi
+        midi_duration = pretty_midi.PrettyMIDI(vocal_path).get_end_time()
+        target_len = int(midi_duration * sr_s)
+        n_frames = int(np.ceil(target_len / hop_length))
+        f0_song = midi_to_pitch_contour(vocal_path, n_frames, hop_length, sr_s)
+        rms = None
+        threshold = None
+    else:
+        # Load vocal audio file
+        y, sr = librosa.load(vocal_path)
+        target_len = len(y)
 
-    # Extract and smooth pitch curve from vocal
-    f0_song = librosa.yin(y, fmin=80, fmax=1000, sr=sr, hop_length=hop_length)
-    f0_song = np.nan_to_num(f0_song)
-    f0_song = np.convolve(f0_song, np.ones(5)/5, mode='same')
+        # Compute RMS for loudness-based gating
+        rms = librosa.feature.rms(y=y, hop_length=hop_length)[0]
+        threshold = np.mean(rms) * rms_ratio
 
-    # Estimate base pitch of sample audio
+        # Extract and smooth pitch curve from vocal
+        f0_song = librosa.yin(y, fmin=80, fmax=1000, sr=sr, hop_length=hop_length)
+        f0_song = np.nan_to_num(f0_song)
+        f0_song = np.convolve(f0_song, np.ones(5)/5, mode='same')
+
+    # Estimate base pitch of Pokemon cry
     f0_sample = librosa.yin(sample, fmin=80, fmax=1000, sr=sr_s)
     f0_sample = f0_sample[~np.isnan(f0_sample)]
     f0_sample = f0_sample[f0_sample > 0]
     base_pitch = np.median(f0_sample)
 
     # Extend sample to match vocal length
-    target_len = len(y)
     repeats = int(np.ceil(target_len / len(sample)))
     sample_extended = np.tile(sample, repeats)[:target_len]
 
@@ -41,8 +68,12 @@ def process_audio(vocal_path, cry_path,
 
     # Apply pitch shifting frame-by-frame with overlap-add
     for i in range(len(f0_song)):
-        if rms[i] < threshold:
-            continue  # skip low-energy frames
+        if is_midi:
+            if f0_song[i] <= 0:
+                continue  # no note active at this frame
+        else:
+            if rms[i] < threshold:
+                continue  # skip low-energy frames
 
         pitch = f0_song[i]
 
@@ -75,11 +106,7 @@ def process_audio(vocal_path, cry_path,
     return absolute_path
 
 if __name__ == "__main__":
-    import sys
-    # Read input paths from command line
     vocal = sys.argv[1]
     cry = sys.argv[2]
-
-    # Process and print output file path
     output_path = process_audio(vocal, cry)
     print(output_path)
